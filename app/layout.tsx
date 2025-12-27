@@ -24,7 +24,10 @@ const geistMono = Geist_Mono({
 export const metadata: Metadata = {
   title: "Rommel Vincent Monterde | Solutions Architect",
   description: "Solutions Architect specializing in Web & Automation Systems.",
-    generator: 'v0.app'
+  icons: {
+    icon: "/icon.png",
+    apple: "/apple-icon.png",
+  },
 }
 
 export default function RootLayout({
