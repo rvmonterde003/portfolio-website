@@ -2,7 +2,7 @@
 
 A modern, minimalist portfolio website built with Next.js, featuring interactive 3D elements and smooth animations.
 
-## 🚀 Tech Stack
+## Tech Stack
 
 - **Framework:** Next.js 16
 - **Styling:** Tailwind CSS v4
@@ -12,7 +12,7 @@ A modern, minimalist portfolio website built with Next.js, featuring interactive
 - **Analytics:** Vercel Analytics
 - **Scheduling:** Calendly Integration
 
-## ✨ Features
+## Features
 
 - Interactive 3D rotating cube with audio visualizer effect
 - Smooth scroll animations with viewport triggers
@@ -21,7 +21,7 @@ A modern, minimalist portfolio website built with Next.js, featuring interactive
 - Contact form with Elfsight integration
 - Calendly scheduling widget
 
-## 📦 Getting Started
+## Getting Started
 
 ### Prerequisites
 
@@ -47,7 +47,7 @@ pnpm build
 pnpm start
 ```
 
-## 📁 Project Structure
+## Project Structure
 
 ```
 ├── app/
@@ -65,7 +65,7 @@ pnpm start
     └── utils.ts          # Utility functions
 ```
 
-## 🎨 Design
+## Design
 
 - **Color Palette:** Monochromatic with light gray (#e4e4e4) and dark (#1e1e1e)
 - **Typography:** Clean, bold uppercase headings with readable body text
