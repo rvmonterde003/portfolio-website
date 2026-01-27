@@ -112,9 +112,9 @@ export default function PortfolioClient() {
             <div className="lg:col-span-8 grid grid-cols-1 md:grid-cols-2 gap-12">
               <motion.div variants={fadeInUp} className="space-y-6">
                 <h3 className="font-atkinson text-xs uppercase tracking-widest font-black opacity-40">The Stack</h3>
-                <p className="text-sm leading-relaxed opacity-70">
-                  The only stack that matters is the one that solves the problem.
-                </p>
+                <h1 className="text-2xl leading-relaxed italic bg-white text-black px-4 py-2 inline-block">
+                  "The only stack that matters is the one that solves the problem."
+                </h1>
               </motion.div>
 
               <motion.div variants={fadeInUp} className="space-y-6">
