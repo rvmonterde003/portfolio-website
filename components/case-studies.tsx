@@ -79,7 +79,7 @@ function Coin() {
 
   useFrame((_, delta) => {
     if (groupRef.current) {
-      groupRef.current.rotation.z += delta * 1.5
+      groupRef.current.rotation.x += delta * 1.5
     }
   })
 
@@ -100,7 +100,7 @@ function Coin() {
       {/* Front face - Dollar sign */}
       <Text
         position={[0, 0.11, 0]}
-        rotation={[-Math.PI / 2, 0, 0]}
+        rotation={[Math.PI / 2, 0, 0]}
         fontSize={1.2}
         color="#1e1e1e"
         anchorX="center"
