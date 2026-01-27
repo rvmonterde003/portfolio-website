@@ -112,37 +112,9 @@ export default function PortfolioClient() {
             <div className="lg:col-span-8 grid grid-cols-1 md:grid-cols-2 gap-12">
               <motion.div variants={fadeInUp} className="space-y-6">
                 <h3 className="font-atkinson text-xs uppercase tracking-widest font-black opacity-40">The Stack</h3>
-                <div className="flex flex-wrap gap-2">
-                  {[
-                    "n8n",
-                    "Make",
-                    "Twilio",
-                    "Freeswitch",
-                    "Python",
-                    "JSON",
-                    "Supabase",
-                    "AWS",
-                    "Vercel",
-                    "Node.js",
-                    "React.js",
-                    "Express.js",
-                    "Next.js",
-                    "C++",
-                    "Unity",
-                    "Figma",
-                    "Blender",
-                    "Photoshop",
-                    "Illustrator",
-                  ].map((skill) => (
-                    <motion.span
-                      key={skill}
-                      whileHover={{ scale: 1.05 }}
-                      className="px-3 py-1 bg-[#e4e4e4] text-[#1e1e1e] font-atkinson text-xs font-bold uppercase hover:bg-[#1e1e1e] hover:text-[#e4e4e4] hover:outline hover:outline-1 hover:outline-[#e4e4e4] transition-all cursor-default"
-                    >
-                      {skill}
-                    </motion.span>
-                  ))}
-                </div>
+                <p className="text-sm leading-relaxed opacity-70">
+                  The only stack that matters is the one that solves the problem.
+                </p>
               </motion.div>
 
               <motion.div variants={fadeInUp} className="space-y-6">
