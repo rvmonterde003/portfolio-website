@@ -2,8 +2,8 @@
 
 import { useRef, useMemo, useEffect } from "react"
 import { Canvas, useFrame } from "@react-three/fiber"
-import { Points, PointMaterial } from "@react-three/drei"
-import type * as THREE from "three"
+import { Points, PointMaterial, Text3D, Center } from "@react-three/drei"
+import * as THREE from "three"
 import { Phone } from "lucide-react"
 
 function RotatingDotSphere() {
@@ -68,6 +68,72 @@ export function DialingPhone() {
           animation: ripple 3s cubic-bezier(0, 0.2, 0.8, 1) infinite;
         }
       `}</style>
+    </div>
+  )
+}
+
+function SpinningDollarSign() {
+  const groupRef = useRef<THREE.Group>(null!)
+
+  useFrame((state) => {
+    groupRef.current.rotation.y += 0.015
+    groupRef.current.rotation.x = Math.sin(state.clock.getElapsedTime() * 0.5) * 0.1
+  })
+
+  // Create dollar sign shape using lines and curves
+  const dollarShape = useMemo(() => {
+    const shape = new THREE.Shape()
+    
+    // S curve of dollar sign (simplified)
+    shape.moveTo(0.3, 0.8)
+    shape.bezierCurveTo(0.3, 0.95, 0.1, 1, -0.1, 1)
+    shape.bezierCurveTo(-0.4, 1, -0.5, 0.85, -0.5, 0.7)
+    shape.bezierCurveTo(-0.5, 0.55, -0.3, 0.45, 0, 0.35)
+    shape.bezierCurveTo(0.3, 0.25, 0.5, 0.15, 0.5, -0.05)
+    shape.bezierCurveTo(0.5, -0.25, 0.3, -0.4, 0, -0.4)
+    shape.bezierCurveTo(-0.2, -0.4, -0.35, -0.35, -0.4, -0.25)
+    
+    return shape
+  }, [])
+
+  return (
+    <group ref={groupRef} scale={1.8}>
+      {/* Main S curve */}
+      <mesh>
+        <extrudeGeometry 
+          args={[dollarShape, { 
+            depth: 0.15, 
+            bevelEnabled: true, 
+            bevelThickness: 0.02, 
+            bevelSize: 0.02, 
+            bevelSegments: 3,
+            curveSegments: 32
+          }]} 
+        />
+        <meshBasicMaterial color="#1e1e1e" />
+      </mesh>
+      
+      {/* Vertical line through dollar sign */}
+      <mesh position={[0, 0.3, 0.075]}>
+        <boxGeometry args={[0.12, 1.6, 0.15]} />
+        <meshBasicMaterial color="#1e1e1e" />
+      </mesh>
+      
+      {/* Wireframe outline for depth */}
+      <lineSegments position={[0, 0, 0.075]}>
+        <edgesGeometry args={[new THREE.BoxGeometry(0.12, 1.6, 0.15)]} />
+        <lineBasicMaterial color="#1e1e1e" linewidth={1} />
+      </lineSegments>
+    </group>
+  )
+}
+
+export function SpinningDollar() {
+  return (
+    <div className="w-full h-full min-h-[300px]">
+      <Canvas camera={{ position: [0, 0, 4], fov: 45 }}>
+        <SpinningDollarSign />
+      </Canvas>
     </div>
   )
 }

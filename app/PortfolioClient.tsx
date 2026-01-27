@@ -4,7 +4,7 @@ import type React from "react"
 import Link from "next/link"
 import { Linkedin, Twitter, ArrowUpRight, Cpu, Layout, Bot, Workflow, PenTool, Database } from "lucide-react"
 import RotatingCube from "@/components/rotating-cube"
-import { DotSphereSection, DialingPhone, PixelCharacter } from "@/components/case-studies"
+import { DotSphereSection, DialingPhone, PixelCharacter, SpinningDollar } from "@/components/case-studies"
 import Navbar from "@/components/navbar"
 import { motion } from "framer-motion"
 
@@ -29,6 +29,7 @@ const CASE_STUDY_LINKS = {
   CALL_ENGINE:
     "https://www.notion.so/Lightweight-AI-Dialer-A-Cost-Efficient-Keyword-Driven-Call-Engine-2c4ffcaadedf80f999f4f64fe8d06ed4?source=copy_link",
   GAME_FITNESS: "https://www.notion.so/Case-Study-Fun-Before-Fit-2c4ffcaadedf80b29f4bddc6377a9668?source=copy_link",
+  ALTU_GRAELE: "#", // Add actual link when available
 }
 
 export default function PortfolioClient() {
@@ -357,6 +358,50 @@ export default function PortfolioClient() {
                 className="order-1 lg:order-2 h-[400px] border border-black/5 rounded-sm overflow-hidden bg-[#e4e4e4]/30"
               >
                 <PixelCharacter />
+              </motion.div>
+            </motion.div>
+
+            {/* Case Study 4 */}
+            <motion.div
+              initial="hidden"
+              whileInView="visible"
+              viewport={{ once: true, margin: "-100px" }}
+              variants={staggerContainer}
+              className="grid grid-cols-1 lg:grid-cols-2 gap-20 items-center"
+            >
+              <motion.div
+                variants={fadeInUp}
+                className="h-[400px] border border-black/5 rounded-sm overflow-hidden bg-[#e4e4e4]/30"
+              >
+                <SpinningDollar />
+              </motion.div>
+              <motion.div variants={fadeInUp}>
+                <h3 className="text-xs font-atkinson font-black tracking-[0.2em] uppercase opacity-40 mb-4">
+                  Altu Graele FnB
+                </h3>
+                <h4 className="text-4xl font-bold tracking-tighter mb-6">Precision Inventory & Profit Engine</h4>
+                <p className="text-sm leading-relaxed opacity-70 mb-8">
+                  A bespoke F&B management ecosystem that moves beyond simple sales tracking to provide ingredient-level
+                  inventory precision and real-time operational transparency.
+                </p>
+                <Link
+                  href={CASE_STUDY_LINKS.ALTU_GRAELE}
+                  target="_blank"
+                  className="inline-flex items-center gap-2 mb-8 px-6 py-3 border border-black font-atkinson text-xs font-black uppercase tracking-widest hover:bg-black hover:text-white transition-all"
+                >
+                  View Case Study <ArrowUpRight size={14} />
+                </Link>
+                <ul className="space-y-3 text-sm font-bold font-atkinson uppercase tracking-tight">
+                  <li className="flex items-center gap-2">
+                    <div className="w-1.5 h-1.5 bg-black" /> 100% Ingredient Visibility
+                  </li>
+                  <li className="flex items-center gap-2">
+                    <div className="w-1.5 h-1.5 bg-black" /> Real-Time OPEX Integration
+                  </li>
+                  <li className="flex items-center gap-2">
+                    <div className="w-1.5 h-1.5 bg-black" /> Data-Driven Margin Optimization
+                  </li>
+                </ul>
               </motion.div>
             </motion.div>
           </div>
