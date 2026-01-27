@@ -29,7 +29,7 @@ const CASE_STUDY_LINKS = {
   CALL_ENGINE:
     "https://www.notion.so/Lightweight-AI-Dialer-A-Cost-Efficient-Keyword-Driven-Call-Engine-2c4ffcaadedf80f999f4f64fe8d06ed4?source=copy_link",
   GAME_FITNESS: "https://www.notion.so/Case-Study-Fun-Before-Fit-2c4ffcaadedf80b29f4bddc6377a9668?source=copy_link",
-  ALTU_GRAELE: "#", // Add actual link when available
+  ALTU_GRAELE: "https://www.notion.so/Precision-Operations-via-Custom-Sales-Inventory-Tracking-2f5ffcaadedf8033aa47ce6527f8317b?source=copy_link",
 }
 
 export default function PortfolioClient() {
