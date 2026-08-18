@@ -2,7 +2,7 @@
 
 import type React from "react"
 import Link from "next/link"
-import { Linkedin, Twitter, ArrowUpRight, Cpu, Layout, Bot, Workflow, PenTool, Database } from "lucide-react"
+import { Linkedin, Twitter, ArrowUpRight, Cpu, Brain, Megaphone, BarChart3, Briefcase, Users } from "lucide-react"
 import RotatingCube from "@/components/rotating-cube"
 import { DotSphereSection, DialingPhone, PixelCharacter, SpinningDollar } from "@/components/case-studies"
 import Navbar from "@/components/navbar"
@@ -51,7 +51,7 @@ export default function PortfolioClient() {
               ROMMEL <br /> VINCENT <br /> MONTERDE
             </h1>
             <p className="text-xl md:text-2xl font-light tracking-tight opacity-70 font-sans max-w-md">
-              Solutions Architect · Web & Automation Systems
+              AI * Robotics * Automation
             </p>
             <motion.div variants={staggerContainer} initial="hidden" animate="visible" className="flex gap-4 mt-12">
               {[
@@ -62,10 +62,6 @@ export default function PortfolioClient() {
                 {
                   href: "https://x.com/vinxx_mntrd",
                   icon: <Twitter size={20} />,
-                },
-                {
-                  href: "https://www.upwork.com/freelancers/~01916695fddcbb8731",
-                  icon: <ArrowUpRight size={20} />,
                 },
               ].map((link, i) => (
                 <motion.div key={i} variants={fadeInUp}>
@@ -104,8 +100,7 @@ export default function PortfolioClient() {
             <motion.div variants={fadeInUp} className="lg:col-span-4">
               <h2 className="text-4xl font-bold tracking-tighter mb-8 text-[#e4e4e4]">ABOUT</h2>
               <p className="text-xl font-light leading-relaxed opacity-80">
-                Delivers fast, scalable MVPs across game development, AI, automation, and real-time systems. I turn
-                ideas into working products efficiently, with measurable results.
+                Delivers fast, scalable end-to-end systems across AI, automation, analytics and robotics.
               </p>
             </motion.div>
 
@@ -150,34 +145,34 @@ export default function PortfolioClient() {
           >
             {[
               {
-                icon: <Layout size={24} />,
-                title: "POS Systems",
-                desc: "Full-stack point-of-sale solutions tailored for retail and hospitality.",
+                icon: <Megaphone size={24} />,
+                title: "AI Marketing and Content Engine",
+                desc: "Content and campaign systems that write, ship, and iterate without a full marketing bench.",
+              },
+              {
+                icon: <Brain size={24} />,
+                title: "Company Brand Brain",
+                desc: "A living brand system that keeps voice, assets, and decisions consistent across every surface.",
+              },
+              {
+                icon: <BarChart3 size={24} />,
+                title: "CRM Dashboard and Sales Call Analysis",
+                desc: "Pipeline visibility plus call-level analysis so sales decisions come from what actually happened.",
+              },
+              {
+                icon: <Briefcase size={24} />,
+                title: "Artificial Company COO & CFO for Founders",
+                desc: "Operator and finance layers that run reporting, decisions, and follow-through while you stay on the work that needs you.",
+              },
+              {
+                icon: <Users size={24} />,
+                title: "Team Performance Analysis and Reporting Automation",
+                desc: "Automated performance readouts so leadership sees what is moving without chasing status updates.",
               },
               {
                 icon: <Cpu size={24} />,
-                title: "Embedded Systems",
-                desc: "Hardware-software integration for real-time monitoring and control.",
-              },
-              {
-                icon: <Workflow size={24} />,
-                title: "Proposal Automation",
-                desc: "Streamlining complex business proposals with intelligent workflows.",
-              },
-              {
-                icon: <Bot size={24} />,
-                title: "AI Automation",
-                desc: "Deploying custom AI agents and NLP models for business efficiency.",
-              },
-              {
-                icon: <Database size={24} />,
-                title: "Workflow Automation",
-                desc: "Connecting disparate tools via n8n and custom API middleware.",
-              },
-              {
-                icon: <PenTool size={24} />,
-                title: "Design & Illustration",
-                desc: "Product design and technical illustration using modern creative tools.",
+                title: "Physical AI and Embedded Systems",
+                desc: "Hardware-software systems that put AI on the floor — sensors, robots, and real-time control.",
               },
             ].map((service, i) => (
               <motion.div key={i} variants={fadeInUp}>
@@ -440,10 +435,12 @@ export default function PortfolioClient() {
             <div className="flex flex-col gap-4 text-left">
               <h3 className="font-atkinson text-xs uppercase tracking-widest font-black opacity-40">Services</h3>
               <div className="flex flex-col gap-2 font-atkinson text-sm uppercase tracking-widest font-bold">
-                <span className="opacity-70">POS Systems</span>
-                <span className="opacity-70">Embedded Systems</span>
-                <span className="opacity-70">AI Automation</span>
-                <span className="opacity-70">Workflow Automation</span>
+                <span className="opacity-70">AI Marketing and Content Engine</span>
+                <span className="opacity-70">Company Brand Brain</span>
+                <span className="opacity-70">CRM Dashboard and Sales Call Analysis</span>
+                <span className="opacity-70">Artificial Company COO &amp; CFO</span>
+                <span className="opacity-70">Team Performance Analysis</span>
+                <span className="opacity-70">Physical AI and Embedded Systems</span>
               </div>
             </div>
 
