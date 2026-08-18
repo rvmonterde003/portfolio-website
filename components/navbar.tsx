@@ -17,7 +17,7 @@ export default function Navbar() {
   ]
 
   return (
-    <nav className="fixed top-0 w-full z-50 backdrop-blur-md bg-[#e4e4e4]/10">
+    <nav className="fixed top-0 w-full z-50 backdrop-blur-md bg-[#e4e4e4]/40">
       <div className="max-w-7xl mx-auto px-6 h-20 flex items-center justify-between">
         <Link href="/" className="flex items-center gap-2">
           <Image src="/images/logo.png" alt="Monterde Logo" width={32} height={32} />

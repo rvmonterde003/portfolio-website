@@ -51,7 +51,7 @@ export default function PortfolioClient() {
               ROMMEL <br /> VINCENT <br /> MONTERDE
             </h1>
             <p className="text-xl md:text-2xl font-light tracking-tight opacity-70 font-sans max-w-md">
-              AI * Robotics * Automation
+              AI · Robotics · Automation
             </p>
             <motion.div variants={staggerContainer} initial="hidden" animate="visible" className="flex gap-4 mt-12">
               {[
@@ -141,7 +141,7 @@ export default function PortfolioClient() {
             whileInView="visible"
             viewport={{ once: true, margin: "-50px" }}
             variants={staggerContainer}
-            className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-px bg-white/10 border border-white/10"
+            className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-px bg-white/10 border border-white/10 items-stretch auto-rows-fr"
           >
             {[
               {
@@ -175,7 +175,7 @@ export default function PortfolioClient() {
                 desc: "Hardware-software systems that put AI on the floor — sensors, robots, and real-time control.",
               },
             ].map((service, i) => (
-              <motion.div key={i} variants={fadeInUp}>
+              <motion.div key={i} variants={fadeInUp} className="h-full">
                 <ServiceCard {...service} />
               </motion.div>
             ))}
@@ -489,7 +489,7 @@ export default function PortfolioClient() {
 
 function ServiceCard({ icon, title, desc }: { icon: React.ReactNode; title: string; desc: string }) {
   return (
-    <div className="p-10 bg-black/20 group hover:bg-[#e4e4e4] hover:text-[#1e1e1e] transition-all duration-500 border border-white/5">
+    <div className="h-full min-h-full p-10 bg-black/20 group hover:bg-[#e4e4e4] hover:text-[#1e1e1e] transition-all duration-500 border border-white/5 flex flex-col">
       <div className="mb-8 opacity-40 group-hover:opacity-100 transition-opacity">{icon}</div>
       <h3 className="text-xl font-bold tracking-tight mb-4">{title}</h3>
       <p className="text-sm leading-relaxed opacity-60 group-hover:opacity-80">{desc}</p>

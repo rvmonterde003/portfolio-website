@@ -2,7 +2,7 @@ import type { Metadata } from "next"
 import PortfolioClient from "./PortfolioClient"
 
 export const metadata: Metadata = {
-  title: "Rommel Vincent Monterde | AI * Robotics * Automation",
+  title: "Rommel Vincent Monterde | AI · Robotics · Automation",
 }
 
 export default function PortfolioPage() {
