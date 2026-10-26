@@ -302,7 +302,7 @@ export default function PortfolioClient() {
                 <h3 className="text-xs font-atkinson font-black tracking-[0.2em] uppercase opacity-40 mb-4">
                   Eeve + Memograph / AI Dev Tooling
                 </h3>
-                <h4 className="text-4xl font-bold tracking-tighter mb-6">Cutting AI Coding Costs by Up to 70%</h4>
+                <h4 className="text-4xl font-bold tracking-tighter mb-6">AI Memory Management</h4>
                 <p className="text-sm leading-relaxed opacity-70 mb-8">
                   AI coding agents burn most of their budget relearning what they already knew: re-reading files,
                   re-asking for context, using a top-tier model for routine work. I built my own tooling to stop that.
@@ -312,7 +312,7 @@ export default function PortfolioClient() {
                 </p>
                 <ul className="space-y-3 text-sm font-bold font-atkinson uppercase tracking-tight">
                   <li className="flex items-center gap-2">
-                    <div className="w-1.5 h-1.5 bg-ink" /> Up to 70% lower AI coding cost
+                    <div className="w-1.5 h-1.5 bg-ink" /> ~70% usage cost reduction
                   </li>
                   <li className="flex items-center gap-2">
                     <div className="w-1.5 h-1.5 bg-ink" /> Context carries over between sessions
