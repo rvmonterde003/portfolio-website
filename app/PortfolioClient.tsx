@@ -304,21 +304,21 @@ export default function PortfolioClient() {
                 </h3>
                 <h4 className="text-4xl font-bold tracking-tighter mb-6">AI Memory Management</h4>
                 <p className="text-sm leading-relaxed opacity-70 mb-8">
-                  AI coding agents burn most of their budget relearning what they already knew: re-reading files,
-                  re-asking for context, using a top-tier model for routine work. I built my own tooling to stop that.
-                  Memograph gives agents a lasting memory of past work, graphify turns the codebase into a map they can
-                  look up instead of re-read, and Eeve sends each task to the right model and runs independent work in
-                  parallel.
+                  A code graph like graphify stops agents re-reading files. Most setups stop there, and agents still
+                  forget every decision, fix and dead end the moment a session ends. My build doesn&apos;t. Memograph keeps
+                  a running memory of past work across sessions and projects, so each agent starts where the last one
+                  left off. Eeve plans the job, sends each task to the cheapest model that can handle it, runs
+                  independent pieces in parallel and puts one senior model on review.
                 </p>
                 <ul className="space-y-3 text-sm font-bold font-atkinson uppercase tracking-tight">
                   <li className="flex items-center gap-2">
                     <div className="w-1.5 h-1.5 bg-ink" /> ~70% usage cost reduction
                   </li>
                   <li className="flex items-center gap-2">
-                    <div className="w-1.5 h-1.5 bg-ink" /> Context carries over between sessions
+                    <div className="w-1.5 h-1.5 bg-ink" /> Remembers decisions, not just code
                   </li>
                   <li className="flex items-center gap-2">
-                    <div className="w-1.5 h-1.5 bg-ink" /> Parallel agents, one reviewer
+                    <div className="w-1.5 h-1.5 bg-ink" /> Cheapest capable model per task
                   </li>
                 </ul>
               </motion.div>

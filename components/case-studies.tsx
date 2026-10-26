@@ -225,17 +225,17 @@ export function PixelCharacter() {
 
 export function CostMeter() {
   const bars = [
-    { label: "Before", width: "100%", note: "Every session re-reads the codebase" },
-    { label: "After", width: "30%", note: "Memory + code graph, right model per task" },
+    { label: "Typical", width: "100%", note: "Code graph only: decisions forgotten, one model does everything" },
+    { label: "My build", width: "30%", note: "Lasting memory, routed models, parallel lanes, one reviewer" },
   ]
 
   return (
     <div className="flex flex-col justify-center w-full h-full min-h-[300px] px-10 gap-10 bg-transparent">
       {bars.map((bar, i) => (
         <div key={bar.label} className="space-y-3">
-          <div className="flex items-baseline justify-between font-atkinson text-[10px] uppercase tracking-widest">
-            <span className="font-black">{bar.label}</span>
-            <span className="opacity-40">{bar.note}</span>
+          <div className="flex items-baseline justify-between gap-4 font-atkinson text-[10px] uppercase tracking-widest">
+            <span className="font-black shrink-0">{bar.label}</span>
+            <span className="opacity-40 text-right">{bar.note}</span>
           </div>
           <div className="h-6 w-full border border-line/15 rounded-sm overflow-hidden">
             <motion.div
