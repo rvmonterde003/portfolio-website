@@ -4,8 +4,9 @@ import { useRef, useMemo } from "react"
 import { Canvas, useFrame } from "@react-three/fiber"
 import { OrbitControls } from "@react-three/drei"
 import * as THREE from "three"
+import { useTheme } from "next-themes"
 
-function AudioRipple() {
+function AudioRipple({ color }: { color: string }) {
   const groupRef = useRef<THREE.Group>(null!)
   const count = 64
   const radius = 1.8
@@ -35,14 +36,14 @@ function AudioRipple() {
       {bars.map((bar, i) => (
         <mesh key={i} position={[bar.x, bar.y, 0]} rotation={[0, 0, bar.angle + Math.PI / 2]}>
           <boxGeometry args={[0.05, 1, 0.05]} />
-          <meshBasicMaterial color="#1e1e1e" />
+          <meshBasicMaterial color={color} />
         </mesh>
       ))}
     </group>
   )
 }
 
-function GridCube() {
+function GridCube({ color }: { color: string }) {
   const meshRef = useRef<THREE.Group>(null!)
 
   useFrame((state, delta) => {
@@ -72,7 +73,7 @@ function GridCube() {
                 ])
               }
             />
-            <lineBasicMaterial attach="material" color="#1e1e1e" linewidth={1} />
+            <lineBasicMaterial attach="material" color={color} linewidth={1} />
           </line>,
           <line key={`y-${i}-${j}`}>
             <bufferGeometry
@@ -84,7 +85,7 @@ function GridCube() {
                 ])
               }
             />
-            <lineBasicMaterial attach="material" color="#1e1e1e" linewidth={1} />
+            <lineBasicMaterial attach="material" color={color} linewidth={1} />
           </line>,
           <line key={`z-${i}-${j}`}>
             <bufferGeometry
@@ -96,23 +97,26 @@ function GridCube() {
                 ])
               }
             />
-            <lineBasicMaterial attach="material" color="#1e1e1e" linewidth={1} />
+            <lineBasicMaterial attach="material" color={color} linewidth={1} />
           </line>,
         )
       }
     }
     return tempLines
-  }, [])
+  }, [color])
 
   return <group ref={meshRef}>{lines}</group>
 }
 
 export default function RotatingCube() {
+  const { resolvedTheme } = useTheme()
+  const strokeColor = resolvedTheme === "light" ? "#1e1e1e" : "#e4e4e4"
+
   return (
     <div className="w-full h-[400px] md:h-full cursor-grab active:cursor-grabbing">
       <Canvas camera={{ position: [0, 0, 6], fov: 45 }}>
-        <GridCube />
-        <AudioRipple />
+        <GridCube color={strokeColor} />
+        <AudioRipple color={strokeColor} />
         <OrbitControls enableZoom={false} autoRotate autoRotateSpeed={0.5} />
       </Canvas>
     </div>

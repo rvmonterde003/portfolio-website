@@ -39,7 +39,7 @@ export default function PortfolioClient() {
       <Navbar />
 
       {/* Hero Section */}
-      <section className="relative min-h-screen flex items-center bg-[#e4e4e4] pt-32 pb-20 lg:pt-20 lg:pb-0 px-6 overflow-hidden">
+      <section className="relative min-h-screen flex items-center bg-surface text-ink pt-32 pb-20 lg:pt-20 lg:pb-0 px-6 overflow-hidden">
         <div className="max-w-7xl mx-auto w-full grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
           <motion.div
             initial={{ opacity: 0, x: -50 }}
@@ -68,7 +68,7 @@ export default function PortfolioClient() {
                   <Link
                     href={link.href}
                     target="_blank"
-                    className="p-3 border border-black/10 hover:bg-black hover:text-white transition-all rounded-full flex items-center justify-center"
+                    className="p-3 border border-line/15 hover:bg-ink hover:text-surface transition-all rounded-full flex items-center justify-center"
                   >
                     {link.icon}
                   </Link>
@@ -88,7 +88,7 @@ export default function PortfolioClient() {
       </section>
 
       {/* About Section */}
-      <section id="about" className="bg-[#1e1e1e] text-[#e4e4e4] py-32 px-6">
+      <section id="about" className="bg-surface-contrast text-ink-contrast py-32 px-6">
         <div className="max-w-7xl mx-auto">
           <motion.div
             initial="hidden"
@@ -98,7 +98,7 @@ export default function PortfolioClient() {
             className="grid grid-cols-1 lg:grid-cols-12 gap-16"
           >
             <motion.div variants={fadeInUp} className="lg:col-span-4">
-              <h2 className="text-4xl font-bold tracking-tighter mb-8 text-[#e4e4e4]">ABOUT</h2>
+              <h2 className="text-4xl font-bold tracking-tighter mb-8 text-ink-contrast">ABOUT</h2>
               <p className="text-xl font-light leading-relaxed opacity-80">
                 Delivers fast, scalable end-to-end systems across AI, automation, analytics and robotics.
               </p>
@@ -107,7 +107,7 @@ export default function PortfolioClient() {
             <div className="lg:col-span-8 grid grid-cols-1 md:grid-cols-2 gap-12">
               <motion.div variants={fadeInUp} className="space-y-6">
                 <h3 className="font-atkinson text-xs uppercase tracking-widest font-black opacity-40">The Stack</h3>
-                <h1 className="text-2xl leading-relaxed italic bg-white text-black px-4 py-2 inline-block">
+                <h1 className="text-2xl leading-relaxed italic bg-ink-contrast text-surface-contrast px-4 py-2 inline-block">
                   "The only stack that matters is the one that solves the problem."
                 </h1>
               </motion.div>
@@ -126,13 +126,13 @@ export default function PortfolioClient() {
       </section>
 
       {/* Services Section */}
-      <section id="services" className="py-32 px-6 bg-[#1e1e1e] text-[#e4e4e4]">
+      <section id="services" className="py-32 px-6 bg-surface-contrast text-ink-contrast">
         <div className="max-w-7xl mx-auto">
           <motion.h2
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
-            className="text-4xl font-bold tracking-tighter mb-16 text-[#e4e4e4]"
+            className="text-4xl font-bold tracking-tighter mb-16 text-ink-contrast"
           >
             SERVICES
           </motion.h2>
@@ -141,7 +141,7 @@ export default function PortfolioClient() {
             whileInView="visible"
             viewport={{ once: true, margin: "-50px" }}
             variants={staggerContainer}
-            className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-px bg-white/10 border border-white/10 items-stretch auto-rows-fr"
+            className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-px bg-ink-contrast/10 border border-ink-contrast/10 items-stretch auto-rows-fr"
           >
             {[
               {
@@ -184,7 +184,7 @@ export default function PortfolioClient() {
       </section>
 
       {/* Case Studies */}
-      <section id="case-studies" className="py-32 px-6 bg-white">
+      <section id="case-studies" className="py-32 px-6 bg-surface-alt dark:bg-surface text-ink">
         <div className="max-w-7xl mx-auto">
           <motion.h2
             initial={{ opacity: 0, x: -30 }}
@@ -216,25 +216,25 @@ export default function PortfolioClient() {
                 <Link
                   href={CASE_STUDY_LINKS.HYBRID_LEADERSHIP}
                   target="_blank"
-                  className="inline-flex items-center gap-2 mb-8 px-6 py-3 border border-black font-atkinson text-xs font-black uppercase tracking-widest hover:bg-black hover:text-white transition-all"
+                  className="inline-flex items-center gap-2 mb-8 px-6 py-3 border border-line font-atkinson text-xs font-black uppercase tracking-widest hover:bg-ink hover:text-surface transition-all"
                 >
                   View Case Study <ArrowUpRight size={14} />
                 </Link>
                 <ul className="space-y-3 text-sm font-bold font-atkinson uppercase tracking-tight">
                   <li className="flex items-center gap-2">
-                    <div className="w-1.5 h-1.5 bg-black" /> 10+ MVPs in 10 months
+                    <div className="w-1.5 h-1.5 bg-ink" /> 10+ MVPs in 10 months
                   </li>
                   <li className="flex items-center gap-2">
-                    <div className="w-1.5 h-1.5 bg-black" /> 62-70% faster delivery
+                    <div className="w-1.5 h-1.5 bg-ink" /> 62-70% faster delivery
                   </li>
                   <li className="flex items-center gap-2">
-                    <div className="w-1.5 h-1.5 bg-black" /> 60-70% cost reduction
+                    <div className="w-1.5 h-1.5 bg-ink" /> 60-70% cost reduction
                   </li>
                 </ul>
               </motion.div>
               <motion.div
                 variants={fadeInUp}
-                className="order-1 lg:order-2 h-[400px] border border-black/5 rounded-sm overflow-hidden bg-[#e4e4e4]/30"
+                className="order-1 lg:order-2 h-[400px] border border-line/10 rounded-sm overflow-hidden bg-surface/30 dark:bg-surface-alt/60"
               >
                 <DotSphereSection />
               </motion.div>
@@ -250,7 +250,7 @@ export default function PortfolioClient() {
             >
               <motion.div
                 variants={fadeInUp}
-                className="h-[400px] border border-black/5 rounded-sm overflow-hidden bg-[#e4e4e4]/30"
+                className="h-[400px] border border-line/10 rounded-sm overflow-hidden bg-surface/30 dark:bg-surface-alt/60"
               >
                 <DialingPhone />
               </motion.div>
@@ -266,16 +266,16 @@ export default function PortfolioClient() {
                 <Link
                   href={CASE_STUDY_LINKS.CALL_ENGINE}
                   target="_blank"
-                  className="inline-flex items-center gap-2 mb-8 px-6 py-3 border border-black font-atkinson text-xs font-black uppercase tracking-widest hover:bg-black hover:text-white transition-all"
+                  className="inline-flex items-center gap-2 mb-8 px-6 py-3 border border-line font-atkinson text-xs font-black uppercase tracking-widest hover:bg-ink hover:text-surface transition-all"
                 >
                   View Case Study <ArrowUpRight size={14} />
                 </Link>
                 <div className="grid grid-cols-2 gap-4">
-                  <div className="p-4 border border-black/10 rounded-sm">
+                  <div className="p-4 border border-line/15 rounded-sm">
                     <div className="text-2xl font-black">$0.02</div>
                     <div className="text-[10px] font-atkinson uppercase tracking-widest opacity-40">Cost per call</div>
                   </div>
-                  <div className="p-4 border border-black/10 rounded-sm">
+                  <div className="p-4 border border-line/15 rounded-sm">
                     <div className="text-2xl font-black">&lt;150ms</div>
                     <div className="text-[10px] font-atkinson uppercase tracking-widest opacity-40">
                       Decision Latency
@@ -305,7 +305,7 @@ export default function PortfolioClient() {
                 <Link
                   href={CASE_STUDY_LINKS.GAME_FITNESS}
                   target="_blank"
-                  className="inline-flex items-center gap-2 mb-8 px-6 py-3 border border-black font-atkinson text-xs font-black uppercase tracking-widest hover:bg-black hover:text-white transition-all"
+                  className="inline-flex items-center gap-2 mb-8 px-6 py-3 border border-line font-atkinson text-xs font-black uppercase tracking-widest hover:bg-ink hover:text-surface transition-all"
                 >
                   View Case Study <ArrowUpRight size={14} />
                 </Link>
@@ -313,7 +313,7 @@ export default function PortfolioClient() {
                   {["MediaPipe", "Unity", "Motion Tracking"].map((tag) => (
                     <span
                       key={tag}
-                      className="px-2 py-1 border border-black/20 text-[10px] font-atkinson font-bold uppercase"
+                      className="px-2 py-1 border border-line/20 text-[10px] font-atkinson font-bold uppercase"
                     >
                       {tag}
                     </span>
@@ -322,7 +322,7 @@ export default function PortfolioClient() {
               </motion.div>
               <motion.div
                 variants={fadeInUp}
-                className="order-1 lg:order-2 h-[400px] border border-black/5 rounded-sm overflow-hidden bg-[#e4e4e4]/30"
+                className="order-1 lg:order-2 h-[400px] border border-line/10 rounded-sm overflow-hidden bg-surface/30 dark:bg-surface-alt/60"
               >
                 <PixelCharacter />
               </motion.div>
@@ -338,7 +338,7 @@ export default function PortfolioClient() {
             >
               <motion.div
                 variants={fadeInUp}
-                className="h-[400px] border border-black/5 rounded-sm overflow-hidden bg-[#e4e4e4]/30"
+                className="h-[400px] border border-line/10 rounded-sm overflow-hidden bg-surface/30 dark:bg-surface-alt/60"
               >
                 <SpinningDollar />
               </motion.div>
@@ -354,19 +354,19 @@ export default function PortfolioClient() {
                 <Link
                   href={CASE_STUDY_LINKS.ALTU_GRAELE}
                   target="_blank"
-                  className="inline-flex items-center gap-2 mb-8 px-6 py-3 border border-black font-atkinson text-xs font-black uppercase tracking-widest hover:bg-black hover:text-white transition-all"
+                  className="inline-flex items-center gap-2 mb-8 px-6 py-3 border border-line font-atkinson text-xs font-black uppercase tracking-widest hover:bg-ink hover:text-surface transition-all"
                 >
                   View Case Study <ArrowUpRight size={14} />
                 </Link>
                 <ul className="space-y-3 text-sm font-bold font-atkinson uppercase tracking-tight">
                   <li className="flex items-center gap-2">
-                    <div className="w-1.5 h-1.5 bg-black" /> 100% Ingredient Visibility
+                    <div className="w-1.5 h-1.5 bg-ink" /> 100% Ingredient Visibility
                   </li>
                   <li className="flex items-center gap-2">
-                    <div className="w-1.5 h-1.5 bg-black" /> Real-Time OPEX Integration
+                    <div className="w-1.5 h-1.5 bg-ink" /> Real-Time OPEX Integration
                   </li>
                   <li className="flex items-center gap-2">
-                    <div className="w-1.5 h-1.5 bg-black" /> Data-Driven Margin Optimization
+                    <div className="w-1.5 h-1.5 bg-ink" /> Data-Driven Margin Optimization
                   </li>
                 </ul>
               </motion.div>
@@ -376,7 +376,7 @@ export default function PortfolioClient() {
       </section>
 
       {/* Contact Section */}
-      <section id="contact" className="py-32 px-6 bg-[#e4e4e4] text-[#1e1e1e]">
+      <section id="contact" className="py-32 px-6 bg-surface dark:bg-surface-alt text-ink">
         <motion.div
           initial="hidden"
           whileInView="visible"
@@ -393,7 +393,7 @@ export default function PortfolioClient() {
           </div>
           <button
             onClick={() => (window as any).Calendly?.showPopupWidget("https://calendly.com/rommelvincent2001/30min")}
-            className="px-8 py-4 bg-[#1e1e1e] text-[#e4e4e4] font-atkinson font-black uppercase tracking-widest hover:bg-black transition-colors rounded-sm"
+            className="px-8 py-4 bg-ink text-surface font-atkinson font-black uppercase tracking-widest hover:opacity-90 transition-colors rounded-sm"
           >
             Book a Call
           </button>
@@ -401,7 +401,7 @@ export default function PortfolioClient() {
       </section>
 
       {/* Footer */}
-      <footer className="min-h-screen px-6 py-20 bg-[#1e1e1e] text-[#e4e4e4] flex flex-col items-center justify-center relative overflow-hidden">
+      <footer className="min-h-screen px-6 py-20 bg-surface-contrast dark:bg-surface text-ink-contrast flex flex-col items-center justify-center relative overflow-hidden">
         <div className="max-w-7xl mx-auto w-full text-center z-10 flex flex-col items-center">
           <motion.h2
             initial={{ opacity: 0, scale: 0.95 }}
@@ -413,7 +413,7 @@ export default function PortfolioClient() {
             IDENTIFY. <br /> SIMPLIFY. <br /> OPTIMIZE. <br /> BUILD.
           </motion.h2>
 
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-12 w-full max-w-5xl mt-12 pt-12 border-t border-white/10">
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-12 w-full max-w-5xl mt-12 pt-12 border-t border-ink-contrast/10">
             <div className="flex flex-col gap-4 text-left">
               <h3 className="font-atkinson text-xs uppercase tracking-widest font-black opacity-40">Quick Links</h3>
               <div className="flex flex-col gap-2 font-atkinson text-sm uppercase tracking-widest font-bold">
@@ -489,7 +489,7 @@ export default function PortfolioClient() {
 
 function ServiceCard({ icon, title, desc }: { icon: React.ReactNode; title: string; desc: string }) {
   return (
-    <div className="h-full min-h-full p-10 bg-black/20 group hover:bg-[#e4e4e4] hover:text-[#1e1e1e] transition-all duration-500 border border-white/5 flex flex-col">
+    <div className="h-full min-h-full p-10 bg-black/20 group hover:bg-ink-contrast hover:text-surface-contrast transition-all duration-500 border border-ink-contrast/5 flex flex-col">
       <div className="mb-8 opacity-40 group-hover:opacity-100 transition-opacity">{icon}</div>
       <h3 className="text-xl font-bold tracking-tight mb-4">{title}</h3>
       <p className="text-sm leading-relaxed opacity-60 group-hover:opacity-80">{desc}</p>
