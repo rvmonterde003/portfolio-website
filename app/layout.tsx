@@ -22,8 +22,8 @@ const geistMono = Geist_Mono({
 })
 
 export const metadata: Metadata = {
-  title: "Rommel Vincent Monterde | AI · Robotics · Automation",
-  description: "Delivers fast, scalable end-to-end systems across AI, automation, analytics and robotics.",
+  title: 'Rommel Vincent "Mel" Monterde | Robotics & AI Systems Engineer',
+  description: "I build autonomous systems end to end: AI agents and apps, physical AI and robotics, custom tools, and AI training for teams.",
   icons: {
     icon: "/icon.png",
     apple: "/apple-icon.png",

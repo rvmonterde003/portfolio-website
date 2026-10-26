@@ -2,7 +2,7 @@
 
 import type React from "react"
 import Link from "next/link"
-import { Linkedin, Twitter, ArrowUpRight, Cpu, Brain, Megaphone, BarChart3, Briefcase, Users } from "lucide-react"
+import { Linkedin, Twitter, Cpu, Brain, Megaphone, BarChart3, Briefcase, Users } from "lucide-react"
 import RotatingCube from "@/components/rotating-cube"
 import { DotSphereSection, DialingPhone, PixelCharacter, SpinningDollar } from "@/components/case-studies"
 import Navbar from "@/components/navbar"
@@ -21,15 +21,6 @@ const staggerContainer = {
       staggerChildren: 0.1,
     },
   },
-}
-
-const CASE_STUDY_LINKS = {
-  HYBRID_LEADERSHIP:
-    "https://www.notion.so/Frameworks-I-Use-to-Deliver-High-Quality-and-Efficient-Software-Architecture-2c4ffcaadedf804095a9c8d0a36bcc95?source=copy_link",
-  CALL_ENGINE:
-    "https://www.notion.so/Lightweight-AI-Dialer-A-Cost-Efficient-Keyword-Driven-Call-Engine-2c4ffcaadedf80f999f4f64fe8d06ed4?source=copy_link",
-  GAME_FITNESS: "https://www.notion.so/Case-Study-Fun-Before-Fit-2c4ffcaadedf80b29f4bddc6377a9668?source=copy_link",
-  ALTU_GRAELE: "https://www.notion.so/Precision-Operations-via-Custom-Sales-Inventory-Tracking-2f5ffcaadedf8033aa47ce6527f8317b?source=copy_link",
 }
 
 export default function PortfolioClient() {
@@ -51,7 +42,10 @@ export default function PortfolioClient() {
               ROMMEL <br /> VINCENT <br /> MONTERDE
             </h1>
             <p className="text-xl md:text-2xl font-light tracking-tight opacity-70 font-sans max-w-md">
-              AI · Robotics · Automation
+              Autonomous systems, end to end
+            </p>
+            <p className="text-xl md:text-2xl font-light tracking-tight opacity-70 font-sans max-w-md">
+              AI software · Physical AI · Custom tools · Team AI training
             </p>
             <motion.div variants={staggerContainer} initial="hidden" animate="visible" className="flex gap-4 mt-12">
               {[
@@ -100,7 +94,10 @@ export default function PortfolioClient() {
             <motion.div variants={fadeInUp} className="lg:col-span-4">
               <h2 className="text-4xl font-bold tracking-tighter mb-8 text-[#e4e4e4]">ABOUT</h2>
               <p className="text-xl font-light leading-relaxed opacity-80">
-                Delivers fast, scalable end-to-end systems across AI, automation, analytics and robotics.
+                I build things that run on their own: AI software that does real work inside a business, robots that
+                sense and act in the physical world, and the internal tools that tie them together. Most teams need a
+                mechanical designer, an electronics engineer, an AI developer and a tools builder. I do all four, and I
+                train your team to run what I build.
               </p>
             </motion.div>
 
@@ -115,9 +112,21 @@ export default function PortfolioClient() {
               <motion.div variants={fadeInUp} className="space-y-6">
                 <h3 className="font-atkinson text-xs uppercase tracking-widest font-black opacity-40">The Approach</h3>
                 <p className="text-sm leading-relaxed opacity-70">
-                  I lead through Agile-Lean hybrid methodology with servant leadership, combining Feature-Driven
-                  Development with XP's collaborative iteration cycles. I provide technical vision through flowcharts
-                  and core architecture while empowering team members as equals.
+                  Fixed scope, fixed timeline. Week 0 is access and setup, then weekly demos, then handover with docs
+                  and training. You own the code and the accounts. Security first: personal data is scrubbed before it
+                  reaches an AI model, access is role-based, and every feature is reviewed before release.
+                </p>
+              </motion.div>
+
+              <motion.div variants={fadeInUp} className="space-y-6">
+                <h3 className="font-atkinson text-xs uppercase tracking-widest font-black opacity-40">Now</h3>
+                <p className="text-sm leading-relaxed opacity-70">
+                  Founding Engineer, Lead Robotics &amp; AI Architect at Klick Drone — I own the AI drone program&apos;s
+                  architecture across mechanical, electronics and software.
+                </p>
+                <p className="text-sm leading-relaxed opacity-70">
+                  Pod Lead &amp; Technical Lead at Prime AI — I lead a delivery pod building custom AI platforms for
+                  founder-led businesses on fixed 6-week scopes.
                 </p>
               </motion.div>
             </div>
@@ -145,34 +154,34 @@ export default function PortfolioClient() {
           >
             {[
               {
-                icon: <Megaphone size={24} />,
-                title: "AI Marketing and Content Engine",
-                desc: "Content and campaign systems that write, ship, and iterate without a full marketing bench.",
-              },
-              {
                 icon: <Brain size={24} />,
-                title: "Company Brand Brain",
-                desc: "A living brand system that keeps voice, assets, and decisions consistent across every surface.",
+                title: "AI Agents & Apps",
+                desc: "Assistants, automations and dashboards that plug into the tools you already use and do real work.",
               },
               {
                 icon: <BarChart3 size={24} />,
-                title: "CRM Dashboard and Sales Call Analysis",
-                desc: "Pipeline visibility plus call-level analysis so sales decisions come from what actually happened.",
-              },
-              {
-                icon: <Briefcase size={24} />,
-                title: "Artificial Company COO & CFO for Founders",
-                desc: "Operator and finance layers that run reporting, decisions, and follow-through while you stay on the work that needs you.",
-              },
-              {
-                icon: <Users size={24} />,
-                title: "Team Performance Analysis and Reporting Automation",
-                desc: "Automated performance readouts so leadership sees what is moving without chasing status updates.",
+                title: "Sales Call Analysis & CRM",
+                desc: "Call-level grading and pipeline visibility so sales decisions come from what actually happened.",
               },
               {
                 icon: <Cpu size={24} />,
-                title: "Physical AI and Embedded Systems",
-                desc: "Hardware-software systems that put AI on the floor — sensors, robots, and real-time control.",
+                title: "Physical AI & Robotics",
+                desc: "Computer vision, sensors and autonomous prototypes that sense, decide and act in the real world.",
+              },
+              {
+                icon: <Briefcase size={24} />,
+                title: "Mechanical & Electronics Prototyping",
+                desc: "CAD and 3D-printed mechanical design, wiring and sensor integration, from bench to working hardware.",
+              },
+              {
+                icon: <Megaphone size={24} />,
+                title: "Custom Internal Tools",
+                desc: "The dashboards, pipelines and admin panels your team actually uses every day.",
+              },
+              {
+                icon: <Users size={24} />,
+                title: "AI Training for Teams",
+                desc: 'Hands-on training that takes your people from "we tried ChatGPT" to running AI in daily work.',
               },
             ].map((service, i) => (
               <motion.div key={i} variants={fadeInUp} className="h-full">
@@ -213,13 +222,6 @@ export default function PortfolioClient() {
                   Leading small engineering teams to deliver high-quality MVPs rapidly across radically different
                   domains—from real-time multiplayer games to AI automation systems.
                 </p>
-                <Link
-                  href={CASE_STUDY_LINKS.HYBRID_LEADERSHIP}
-                  target="_blank"
-                  className="inline-flex items-center gap-2 mb-8 px-6 py-3 border border-black font-atkinson text-xs font-black uppercase tracking-widest hover:bg-black hover:text-white transition-all"
-                >
-                  View Case Study <ArrowUpRight size={14} />
-                </Link>
                 <ul className="space-y-3 text-sm font-bold font-atkinson uppercase tracking-tight">
                   <li className="flex items-center gap-2">
                     <div className="w-1.5 h-1.5 bg-black" /> 10+ MVPs in 10 months
@@ -263,13 +265,6 @@ export default function PortfolioClient() {
                   A telecom-grade solution for high-volume outbound calls using keyword detection and FSM architecture
                   instead of expensive generative AI.
                 </p>
-                <Link
-                  href={CASE_STUDY_LINKS.CALL_ENGINE}
-                  target="_blank"
-                  className="inline-flex items-center gap-2 mb-8 px-6 py-3 border border-black font-atkinson text-xs font-black uppercase tracking-widest hover:bg-black hover:text-white transition-all"
-                >
-                  View Case Study <ArrowUpRight size={14} />
-                </Link>
                 <div className="grid grid-cols-2 gap-4">
                   <div className="p-4 border border-black/10 rounded-sm">
                     <div className="text-2xl font-black">$0.02</div>
@@ -302,13 +297,6 @@ export default function PortfolioClient() {
                   Reversing traditional fitness app design—prioritizing gameplay over workouts—using MediaPipe pose
                   detection and Unity for hardware-free motion gaming.
                 </p>
-                <Link
-                  href={CASE_STUDY_LINKS.GAME_FITNESS}
-                  target="_blank"
-                  className="inline-flex items-center gap-2 mb-8 px-6 py-3 border border-black font-atkinson text-xs font-black uppercase tracking-widest hover:bg-black hover:text-white transition-all"
-                >
-                  View Case Study <ArrowUpRight size={14} />
-                </Link>
                 <div className="flex flex-wrap gap-2">
                   {["MediaPipe", "Unity", "Motion Tracking"].map((tag) => (
                     <span
@@ -351,13 +339,6 @@ export default function PortfolioClient() {
                   A bespoke F&B management ecosystem that moves beyond simple sales tracking to provide ingredient-level
                   inventory precision and real-time operational transparency.
                 </p>
-                <Link
-                  href={CASE_STUDY_LINKS.ALTU_GRAELE}
-                  target="_blank"
-                  className="inline-flex items-center gap-2 mb-8 px-6 py-3 border border-black font-atkinson text-xs font-black uppercase tracking-widest hover:bg-black hover:text-white transition-all"
-                >
-                  View Case Study <ArrowUpRight size={14} />
-                </Link>
                 <ul className="space-y-3 text-sm font-bold font-atkinson uppercase tracking-tight">
                   <li className="flex items-center gap-2">
                     <div className="w-1.5 h-1.5 bg-black" /> 100% Ingredient Visibility
@@ -386,7 +367,7 @@ export default function PortfolioClient() {
         >
           <h2 className="text-6xl md:text-8xl font-black tracking-tighter mb-12">LET&apos;S CHAT.</h2>
           <p className="text-xl font-light opacity-60 mb-16 max-w-2xl">
-            Currently open for architecture consulting and high-velocity MVP builds.
+            Open for AI builds, physical AI prototypes and team AI training.
           </p>
           <div className="w-full max-w-2xl mb-12">
             <div className="elfsight-app-62167af8-ce02-462f-82a8-df7b61938922" data-elfsight-app-lazy></div>
@@ -435,12 +416,12 @@ export default function PortfolioClient() {
             <div className="flex flex-col gap-4 text-left">
               <h3 className="font-atkinson text-xs uppercase tracking-widest font-black opacity-40">Services</h3>
               <div className="flex flex-col gap-2 font-atkinson text-sm uppercase tracking-widest font-bold">
-                <span className="opacity-70">AI Marketing and Content Engine</span>
-                <span className="opacity-70">Company Brand Brain</span>
-                <span className="opacity-70">CRM Dashboard and Sales Call Analysis</span>
-                <span className="opacity-70">Artificial Company COO &amp; CFO</span>
-                <span className="opacity-70">Team Performance Analysis</span>
-                <span className="opacity-70">Physical AI and Embedded Systems</span>
+                <span className="opacity-70">AI Agents &amp; Apps</span>
+                <span className="opacity-70">Sales Call Analysis &amp; CRM</span>
+                <span className="opacity-70">Physical AI &amp; Robotics</span>
+                <span className="opacity-70">Mechanical &amp; Electronics Prototyping</span>
+                <span className="opacity-70">Custom Internal Tools</span>
+                <span className="opacity-70">AI Training for Teams</span>
               </div>
             </div>
 
@@ -466,7 +447,7 @@ export default function PortfolioClient() {
           </div>
 
           <div className="mt-32 text-[10px] font-atkinson font-black uppercase tracking-[0.3em] opacity-40">
-            © 2025 MONTERDE · ROMMEL VINCENT · ALL RIGHTS RESERVED
+            © 2026 MONTERDE · ROMMEL VINCENT · ALL RIGHTS RESERVED
           </div>
         </div>
 
