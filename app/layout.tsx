@@ -23,8 +23,44 @@ const geistMono = Geist_Mono({
 })
 
 export const metadata: Metadata = {
-  title: 'Rommel Vincent "Mel" Monterde | Robotics & AI Systems Engineer',
-  description: "I build autonomous systems end to end: AI agents and apps, physical AI and robotics, custom tools, and AI training for teams.",
+  metadataBase: new URL("https://monterdesystems.xyz"),
+  title: {
+    default: `Rommel "Mel" Monterde | AI Agents & Robotics Engineer`,
+    template: `%s | Mel Monterde`,
+  },
+  description: `Custom AI agents, AI sales call analysis, physical AI and hardware prototyping, built end to end by Rommel "Mel" Monterde, robotics & AI engineer in Cebu, Philippines.`,
+  keywords: [
+    "custom AI agents for business",
+    "AI agent developer",
+    "AI sales call analysis",
+    "physical AI and robotics",
+    "robotics prototyping services",
+    "hardware prototyping services",
+    "embedded systems engineer",
+    "AI training for employees",
+    "AI automation consultant",
+    "AI developer Philippines",
+    "Rommel Vincent Monterde",
+    "Mel Monterde",
+  ],
+  authors: [{ name: "Rommel Vincent Monterde", url: "https://monterdesystems.xyz" }],
+  creator: "Rommel Vincent Monterde",
+  alternates: { canonical: "/" },
+  openGraph: {
+    type: "website",
+    url: "/",
+    siteName: "Monterde Systems",
+    locale: "en_US",
+    title: `Rommel "Mel" Monterde | AI Agents & Robotics Engineer`,
+    description: `Custom AI agents, AI sales call analysis, physical AI and hardware prototyping, built end to end by Rommel "Mel" Monterde, robotics & AI engineer in Cebu, Philippines.`,
+  },
+  twitter: {
+    card: "summary_large_image",
+    creator: "@vinxx_mntrd",
+    title: `Rommel "Mel" Monterde | AI Agents & Robotics Engineer`,
+    description: `Custom AI agents, AI sales call analysis, physical AI and hardware prototyping, built end to end by Rommel "Mel" Monterde, robotics & AI engineer in Cebu, Philippines.`,
+  },
+  robots: { index: true, follow: true },
   icons: {
     icon: "/icon.png",
     apple: "/apple-icon.png",

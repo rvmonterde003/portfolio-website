@@ -7,6 +7,7 @@ import * as THREE from "three"
 import type { Group, Mesh } from "three"
 import { Phone } from "lucide-react"
 import { useTheme } from "next-themes"
+import { motion } from "framer-motion"
 
 function RotatingDotSphere({ color }: { color: string }) {
   const pointsRef = useRef<THREE.Points>(null!)
@@ -218,6 +219,36 @@ export function PixelCharacter() {
           animation: pixel-move 2s ease-in-out infinite alternate;
         }
       `}</style>
+    </div>
+  )
+}
+
+export function CostMeter() {
+  const bars = [
+    { label: "Before", width: "100%", note: "Every session re-reads the codebase" },
+    { label: "After", width: "30%", note: "Memory + code graph, right model per task" },
+  ]
+
+  return (
+    <div className="flex flex-col justify-center w-full h-full min-h-[300px] px-10 gap-10 bg-transparent">
+      {bars.map((bar, i) => (
+        <div key={bar.label} className="space-y-3">
+          <div className="flex items-baseline justify-between font-atkinson text-[10px] uppercase tracking-widest">
+            <span className="font-black">{bar.label}</span>
+            <span className="opacity-40">{bar.note}</span>
+          </div>
+          <div className="h-6 w-full border border-line/15 rounded-sm overflow-hidden">
+            <motion.div
+              initial={{ width: 0 }}
+              whileInView={{ width: bar.width }}
+              viewport={{ once: true }}
+              transition={{ duration: 1.4, ease: "easeOut", delay: i * 0.4 }}
+              className={i === 0 ? "h-full bg-ink/30" : "h-full bg-ink"}
+            />
+          </div>
+        </div>
+      ))}
+      <div className="font-atkinson text-[10px] uppercase tracking-widest opacity-40">AI coding spend, same workload</div>
     </div>
   )
 }

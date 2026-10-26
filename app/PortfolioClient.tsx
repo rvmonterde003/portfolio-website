@@ -4,7 +4,7 @@ import type React from "react"
 import Link from "next/link"
 import { Linkedin, Twitter, Cpu, Brain, Megaphone, BarChart3, Briefcase, Users } from "lucide-react"
 import RotatingCube from "@/components/rotating-cube"
-import { DotSphereSection, DialingPhone, PixelCharacter, SpinningDollar } from "@/components/case-studies"
+import { DotSphereSection, DialingPhone, CostMeter } from "@/components/case-studies"
 import Navbar from "@/components/navbar"
 import { motion } from "framer-motion"
 
@@ -38,23 +38,28 @@ export default function PortfolioClient() {
             transition={{ duration: 1, ease: "easeOut" }}
             className="z-10"
           >
+            <p className="font-atkinson text-xs uppercase tracking-widest font-black opacity-50 mb-6">
+              Robotics &amp; AI Systems Engineer · Cebu, Philippines
+            </p>
             <h1 className="text-5xl sm:text-6xl md:text-8xl font-black tracking-tighter leading-none mb-6 text-pretty">
               ROMMEL <br /> VINCENT <br /> MONTERDE
             </h1>
             <p className="text-xl md:text-2xl font-light tracking-tight opacity-70 font-sans max-w-md">
-              Autonomous systems, end to end
+              I build AI agents, robots and the tools that run them.
             </p>
             <p className="text-xl md:text-2xl font-light tracking-tight opacity-70 font-sans max-w-md">
-              AI software · Physical AI · Custom tools · Team AI training
+              From CAD and circuits to production AI. One engineer, end to end.
             </p>
             <motion.div variants={staggerContainer} initial="hidden" animate="visible" className="flex gap-4 mt-12">
               {[
                 {
                   href: "https://www.linkedin.com/in/monterderv2001/",
+                  label: "Mel Monterde on LinkedIn",
                   icon: <Linkedin size={20} />,
                 },
                 {
                   href: "https://x.com/vinxx_mntrd",
+                  label: "Mel Monterde on X",
                   icon: <Twitter size={20} />,
                 },
               ].map((link, i) => (
@@ -62,6 +67,8 @@ export default function PortfolioClient() {
                   <Link
                     href={link.href}
                     target="_blank"
+                    rel="noopener noreferrer"
+                    aria-label={link.label}
                     className="p-3 border border-line/15 hover:bg-ink hover:text-surface transition-all rounded-full flex items-center justify-center"
                   >
                     {link.icon}
@@ -94,27 +101,30 @@ export default function PortfolioClient() {
             <motion.div variants={fadeInUp} className="lg:col-span-4">
               <h2 className="text-4xl font-bold tracking-tighter mb-8 text-ink-contrast">ABOUT</h2>
               <p className="text-xl font-light leading-relaxed opacity-80">
-                I build things that run on their own: AI software that does real work inside a business, robots that
-                sense and act in the physical world, and the internal tools that tie them together. Most teams need a
-                mechanical designer, an electronics engineer, an AI developer and a tools builder. I do all four, and I
-                train your team to run what I build.
+                Most teams hire four people to ship one autonomous system: a mechanical designer, an electronics
+                engineer, an AI developer and someone to build the internal tools. I&apos;m all four. I design the
+                hardware, build the AI, make the tools around it, and train your team to run it.
+              </p>
+              <p className="text-sm font-light leading-relaxed opacity-60 mt-6">
+                Based in Cebu, Philippines. Working with founders and engineering teams in the US and worldwide.
               </p>
             </motion.div>
 
             <div className="lg:col-span-8 grid grid-cols-1 md:grid-cols-2 gap-12">
               <motion.div variants={fadeInUp} className="space-y-6">
                 <h3 className="font-atkinson text-xs uppercase tracking-widest font-black opacity-40">The Stack</h3>
-                <h1 className="text-2xl leading-relaxed italic bg-ink-contrast text-surface-contrast px-4 py-2 inline-block">
-                  "The only stack that matters is the one that solves the problem."
-                </h1>
+                <blockquote className="text-2xl leading-relaxed italic bg-ink-contrast text-surface-contrast px-4 py-2 inline-block">
+                  &ldquo;The only stack that matters is the one that solves the problem.&rdquo;
+                </blockquote>
               </motion.div>
 
               <motion.div variants={fadeInUp} className="space-y-6">
-                <h3 className="font-atkinson text-xs uppercase tracking-widest font-black opacity-40">The Approach</h3>
+                <h3 className="font-atkinson text-xs uppercase tracking-widest font-black opacity-40">How I Work</h3>
                 <p className="text-sm leading-relaxed opacity-70">
-                  Fixed scope, fixed timeline. Week 0 is access and setup, then weekly demos, then handover with docs
-                  and training. You own the code and the accounts. Security first: personal data is scrubbed before it
-                  reaches an AI model, access is role-based, and every feature is reviewed before release.
+                  Fixed scope, fixed timeline. Week 0 is access and setup, then a demo every week, then
+                  handover with docs and training. You own the code and the accounts from day one. Security is built
+                  in: personal data is scrubbed before it reaches an AI model, access is role-based, and every feature
+                  is reviewed before release.
                 </p>
               </motion.div>
 
@@ -143,7 +153,7 @@ export default function PortfolioClient() {
             viewport={{ once: true }}
             className="text-4xl font-bold tracking-tighter mb-16 text-ink-contrast"
           >
-            SERVICES
+            WHAT I BUILD
           </motion.h2>
           <motion.div
             initial="hidden"
@@ -155,33 +165,33 @@ export default function PortfolioClient() {
             {[
               {
                 icon: <Brain size={24} />,
-                title: "AI Agents & Apps",
-                desc: "Assistants, automations and dashboards that plug into the tools you already use and do real work.",
+                title: "Custom AI Agents for Business",
+                desc: "AI agents that plug into your CRM, inbox, docs and calendar and do real work, not demos.",
               },
               {
                 icon: <BarChart3 size={24} />,
-                title: "Sales Call Analysis & CRM",
-                desc: "Call-level grading and pipeline visibility so sales decisions come from what actually happened.",
+                title: "AI Sales Call Analysis",
+                desc: "Every sales call transcribed, graded against your playbook and rolled into CRM dashboards, so coaching runs on what actually happened.",
               },
               {
                 icon: <Cpu size={24} />,
                 title: "Physical AI & Robotics",
-                desc: "Computer vision, sensors and autonomous prototypes that sense, decide and act in the real world.",
+                desc: "Computer vision, sensor fusion and embedded control for robots that sense, decide and act in the real world.",
               },
               {
                 icon: <Briefcase size={24} />,
-                title: "Mechanical & Electronics Prototyping",
-                desc: "CAD and 3D-printed mechanical design, wiring and sensor integration, from bench to working hardware.",
+                title: "Hardware Prototyping Services",
+                desc: "Mechanical CAD, 3D-printed parts, wiring and sensor integration, from sketch to a working prototype.",
               },
               {
                 icon: <Megaphone size={24} />,
-                title: "Custom Internal Tools",
-                desc: "The dashboards, pipelines and admin panels your team actually uses every day.",
+                title: "Custom Internal Tools & Dashboards",
+                desc: "Admin panels, data pipelines and dashboards your team actually opens every day, with role-based access built in.",
               },
               {
                 icon: <Users size={24} />,
-                title: "AI Training for Teams",
-                desc: 'Hands-on training that takes your people from "we tried ChatGPT" to running AI in daily work.',
+                title: "AI Training for Employees",
+                desc: 'Hands-on workshops that take your team from "we tried ChatGPT" to running AI in daily work, on your own tools.',
               },
             ].map((service, i) => (
               <motion.div key={i} variants={fadeInUp} className="h-full">
@@ -201,7 +211,7 @@ export default function PortfolioClient() {
             viewport={{ once: true }}
             className="text-4xl font-bold tracking-tighter mb-24"
           >
-            CASE STUDIES
+            SELECTED WORK
           </motion.h2>
 
           <div className="space-y-48">
@@ -290,66 +300,33 @@ export default function PortfolioClient() {
             >
               <motion.div variants={fadeInUp} className="order-2 lg:order-1">
                 <h3 className="text-xs font-atkinson font-black tracking-[0.2em] uppercase opacity-40 mb-4">
-                  Motion Prototyping
+                  Eeve + Memograph / AI Dev Tooling
                 </h3>
-                <h4 className="text-4xl font-bold tracking-tighter mb-6">Game-First Fitness</h4>
+                <h4 className="text-4xl font-bold tracking-tighter mb-6">Cutting AI Coding Costs by Up to 70%</h4>
                 <p className="text-sm leading-relaxed opacity-70 mb-8">
-                  Reversing traditional fitness app design—prioritizing gameplay over workouts—using MediaPipe pose
-                  detection and Unity for hardware-free motion gaming.
+                  AI coding agents burn most of their budget relearning what they already knew: re-reading files,
+                  re-asking for context, using a top-tier model for routine work. I built my own tooling to stop that.
+                  Memograph gives agents a lasting memory of past work, graphify turns the codebase into a map they can
+                  look up instead of re-read, and Eeve sends each task to the right model and runs independent work in
+                  parallel.
                 </p>
-                <div className="flex flex-wrap gap-2">
-                  {["MediaPipe", "Unity", "Motion Tracking"].map((tag) => (
-                    <span
-                      key={tag}
-                      className="px-2 py-1 border border-line/20 text-[10px] font-atkinson font-bold uppercase"
-                    >
-                      {tag}
-                    </span>
-                  ))}
-                </div>
+                <ul className="space-y-3 text-sm font-bold font-atkinson uppercase tracking-tight">
+                  <li className="flex items-center gap-2">
+                    <div className="w-1.5 h-1.5 bg-ink" /> Up to 70% lower AI coding cost
+                  </li>
+                  <li className="flex items-center gap-2">
+                    <div className="w-1.5 h-1.5 bg-ink" /> Context carries over between sessions
+                  </li>
+                  <li className="flex items-center gap-2">
+                    <div className="w-1.5 h-1.5 bg-ink" /> Parallel agents, one reviewer
+                  </li>
+                </ul>
               </motion.div>
               <motion.div
                 variants={fadeInUp}
                 className="order-1 lg:order-2 h-[400px] border border-line/10 rounded-sm overflow-hidden bg-surface/30 dark:bg-surface-alt/60"
               >
-                <PixelCharacter />
-              </motion.div>
-            </motion.div>
-
-            {/* Case Study 4 */}
-            <motion.div
-              initial="hidden"
-              whileInView="visible"
-              viewport={{ once: true, margin: "-100px" }}
-              variants={staggerContainer}
-              className="grid grid-cols-1 lg:grid-cols-2 gap-20 items-center"
-            >
-              <motion.div
-                variants={fadeInUp}
-                className="h-[400px] border border-line/10 rounded-sm overflow-hidden bg-surface/30 dark:bg-surface-alt/60"
-              >
-                <SpinningDollar />
-              </motion.div>
-              <motion.div variants={fadeInUp}>
-                <h3 className="text-xs font-atkinson font-black tracking-[0.2em] uppercase opacity-40 mb-4">
-                  Altu Graele FnB
-                </h3>
-                <h4 className="text-4xl font-bold tracking-tighter mb-6">Precision Inventory & Profit Engine</h4>
-                <p className="text-sm leading-relaxed opacity-70 mb-8">
-                  A bespoke F&B management ecosystem that moves beyond simple sales tracking to provide ingredient-level
-                  inventory precision and real-time operational transparency.
-                </p>
-                <ul className="space-y-3 text-sm font-bold font-atkinson uppercase tracking-tight">
-                  <li className="flex items-center gap-2">
-                    <div className="w-1.5 h-1.5 bg-ink" /> 100% Ingredient Visibility
-                  </li>
-                  <li className="flex items-center gap-2">
-                    <div className="w-1.5 h-1.5 bg-ink" /> Real-Time OPEX Integration
-                  </li>
-                  <li className="flex items-center gap-2">
-                    <div className="w-1.5 h-1.5 bg-ink" /> Data-Driven Margin Optimization
-                  </li>
-                </ul>
+                <CostMeter />
               </motion.div>
             </motion.div>
           </div>
@@ -365,9 +342,10 @@ export default function PortfolioClient() {
           variants={fadeInUp}
           className="max-w-7xl mx-auto flex flex-col items-center text-center"
         >
-          <h2 className="text-6xl md:text-8xl font-black tracking-tighter mb-12">LET&apos;S CHAT.</h2>
+          <h2 className="text-6xl md:text-8xl font-black tracking-tighter mb-12">BUILD IT ONCE.</h2>
           <p className="text-xl font-light opacity-60 mb-16 max-w-2xl">
-            Open for AI builds, physical AI prototypes and team AI training.
+            Got a process that should run itself, or a robot that should exist? Send the brief below or book a
+            30-minute call. Software, hardware, or both.
           </p>
           <div className="w-full max-w-2xl mb-12">
             <div className="elfsight-app-62167af8-ce02-462f-82a8-df7b61938922" data-elfsight-app-lazy></div>
@@ -376,7 +354,7 @@ export default function PortfolioClient() {
             onClick={() => (window as any).Calendly?.showPopupWidget("https://calendly.com/rommelvincent2001/30min")}
             className="px-8 py-4 bg-ink text-surface font-atkinson font-black uppercase tracking-widest hover:opacity-90 transition-colors rounded-sm"
           >
-            Book a Call
+            Book a 30-Min Call
           </button>
         </motion.div>
       </section>
@@ -391,7 +369,7 @@ export default function PortfolioClient() {
             viewport={{ once: true }}
             className="text-5xl md:text-8xl font-black tracking-tighter leading-tight mb-20 pt-32"
           >
-            IDENTIFY. <br /> SIMPLIFY. <br /> OPTIMIZE. <br /> BUILD.
+            SCOPE. <br /> BUILD. <br /> SHIP. <br /> TRAIN.
           </motion.h2>
 
           <div className="grid grid-cols-1 md:grid-cols-3 gap-12 w-full max-w-5xl mt-12 pt-12 border-t border-ink-contrast/10">
@@ -405,7 +383,7 @@ export default function PortfolioClient() {
                   Services
                 </Link>
                 <Link href="#case-studies" className="hover:opacity-50 transition-opacity">
-                  Case Studies
+                  Work
                 </Link>
                 <Link href="#contact" className="hover:opacity-50 transition-opacity">
                   Contact
@@ -416,12 +394,12 @@ export default function PortfolioClient() {
             <div className="flex flex-col gap-4 text-left">
               <h3 className="font-atkinson text-xs uppercase tracking-widest font-black opacity-40">Services</h3>
               <div className="flex flex-col gap-2 font-atkinson text-sm uppercase tracking-widest font-bold">
-                <span className="opacity-70">AI Agents &amp; Apps</span>
-                <span className="opacity-70">Sales Call Analysis &amp; CRM</span>
+                <span className="opacity-70">Custom AI Agents</span>
+                <span className="opacity-70">AI Sales Call Analysis</span>
                 <span className="opacity-70">Physical AI &amp; Robotics</span>
-                <span className="opacity-70">Mechanical &amp; Electronics Prototyping</span>
-                <span className="opacity-70">Custom Internal Tools</span>
-                <span className="opacity-70">AI Training for Teams</span>
+                <span className="opacity-70">Hardware Prototyping</span>
+                <span className="opacity-70">Internal Tools &amp; Dashboards</span>
+                <span className="opacity-70">AI Training for Employees</span>
               </div>
             </div>
 
@@ -431,6 +409,7 @@ export default function PortfolioClient() {
                 <Link
                   href="https://www.linkedin.com/in/monterderv2001/"
                   target="_blank"
+                  rel="noopener noreferrer"
                   className="hover:opacity-50 transition-opacity flex items-center gap-2"
                 >
                   <Linkedin size={14} /> LinkedIn
@@ -438,6 +417,7 @@ export default function PortfolioClient() {
                 <Link
                   href="https://x.com/vinxx_mntrd"
                   target="_blank"
+                  rel="noopener noreferrer"
                   className="hover:opacity-50 transition-opacity flex items-center gap-2"
                 >
                   <Twitter size={14} /> Twitter
