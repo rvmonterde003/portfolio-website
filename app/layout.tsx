@@ -4,6 +4,7 @@ import { Atkinson_Hyperlegible, Outfit, Geist_Mono } from "next/font/google"
 import { Analytics } from "@vercel/analytics/next"
 import "./globals.css"
 import Script from "next/script"
+import { ThemeProvider } from "@/components/theme-provider"
 
 const atkinson = Atkinson_Hyperlegible({
   subsets: ["latin"],
@@ -36,16 +37,18 @@ export default function RootLayout({
   children: React.ReactNode
 }>) {
   return (
-    <html lang="en" className="scroll-smooth">
+    <html lang="en" className="scroll-smooth" suppressHydrationWarning>
       <head>
         <script src="https://elfsightcdn.com/platform.js" async></script>
         <link href="https://assets.calendly.com/assets/external/widget.css" rel="stylesheet" />
         <script src="https://assets.calendly.com/assets/external/widget.js" type="text/javascript" async></script>
       </head>
       <body
-        className={`${atkinson.variable} ${outfit.variable} ${geistMono.variable} font-sans antialiased bg-[#e4e4e4] text-[#1e1e1e]`}
+        className={`${atkinson.variable} ${outfit.variable} ${geistMono.variable} font-sans antialiased bg-surface text-ink`}
       >
-        {children}
+        <ThemeProvider attribute="class" defaultTheme="dark" enableSystem={false} disableTransitionOnChange>
+          {children}
+        </ThemeProvider>
         <Analytics />
         <Script id="calendly-init" strategy="afterInteractive">
           {`

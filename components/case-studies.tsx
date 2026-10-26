@@ -6,8 +6,9 @@ import { Points, PointMaterial, Text } from "@react-three/drei"
 import * as THREE from "three"
 import type { Group, Mesh } from "three"
 import { Phone } from "lucide-react"
+import { useTheme } from "next-themes"
 
-function RotatingDotSphere() {
+function RotatingDotSphere({ color }: { color: string }) {
   const pointsRef = useRef<THREE.Points>(null!)
 
   const positions = useMemo(() => {
@@ -34,16 +35,19 @@ function RotatingDotSphere() {
 
   return (
     <Points ref={pointsRef} positions={positions} stride={3} frustumCulled={false}>
-      <PointMaterial transparent color="#1e1e1e" size={0.04} sizeAttenuation={true} depthWrite={false} />
+      <PointMaterial transparent color={color} size={0.04} sizeAttenuation={true} depthWrite={false} />
     </Points>
   )
 }
 
 export function DotSphereSection() {
+  const { resolvedTheme } = useTheme()
+  const dotColor = resolvedTheme === "light" ? "#1e1e1e" : "#e4e4e4"
+
   return (
     <div className="w-full h-full min-h-[300px]">
       <Canvas camera={{ position: [0, 0, 5], fov: 45 }}>
-        <RotatingDotSphere />
+        <RotatingDotSphere color={dotColor} />
       </Canvas>
     </div>
   )
@@ -53,11 +57,11 @@ export function DialingPhone() {
   return (
     <div className="flex flex-col items-center justify-center w-full h-full min-h-[300px] bg-transparent">
       <div className="relative flex items-center justify-center">
-        <div className="absolute w-20 h-20 border border-black/20 rounded-full animate-ripple" />
-        <div className="absolute w-20 h-20 border border-black/20 rounded-full animate-ripple [animation-delay:1s]" />
-        <div className="absolute w-20 h-20 border border-black/20 rounded-full animate-ripple [animation-delay:2s]" />
-        <div className="relative z-10 bg-[#e4e4e4] p-6 rounded-full border border-black/10 shadow-sm">
-          <Phone className="w-8 h-8 text-black" strokeWidth={1.5} />
+        <div className="absolute w-20 h-20 border border-line/20 rounded-full animate-ripple" />
+        <div className="absolute w-20 h-20 border border-line/20 rounded-full animate-ripple [animation-delay:1s]" />
+        <div className="absolute w-20 h-20 border border-line/20 rounded-full animate-ripple [animation-delay:2s]" />
+        <div className="relative z-10 bg-surface p-6 rounded-full border border-line/15 shadow-sm">
+          <Phone className="w-8 h-8 text-ink" strokeWidth={1.5} />
         </div>
       </div>
       <style jsx>{`
@@ -73,7 +77,7 @@ export function DialingPhone() {
   )
 }
 
-function Coin() {
+function Coin({ bodyColor, inkColor }: { bodyColor: string; inkColor: string }) {
   const groupRef = useRef<Group>(null)
   const coinRef = useRef<Mesh>(null)
 
@@ -85,16 +89,16 @@ function Coin() {
 
   return (
     <group ref={groupRef}>
-      {/* Main coin body - light colored to match site theme */}
+      {/* Main coin body */}
       <mesh ref={coinRef}>
         <cylinderGeometry args={[2, 2, 0.2, 64]} />
-        <meshBasicMaterial color="#e4e4e4" />
+        <meshBasicMaterial color={bodyColor} />
       </mesh>
 
       {/* Outline mesh - scaled up with inverted normals */}
       <mesh scale={[1.03, 1.15, 1.03]}>
         <cylinderGeometry args={[2, 2, 0.2, 64]} />
-        <meshBasicMaterial color="#1e1e1e" side={THREE.BackSide} />
+        <meshBasicMaterial color={inkColor} side={THREE.BackSide} />
       </mesh>
 
       {/* Front face - Dollar sign */}
@@ -102,11 +106,11 @@ function Coin() {
         position={[0, 0.11, 0]}
         rotation={[-Math.PI / 2, 0, 0]}
         fontSize={1.2}
-        color="#1e1e1e"
+        color={inkColor}
         anchorX="center"
         anchorY="middle"
         outlineWidth={0.02}
-        outlineColor="#1e1e1e"
+        outlineColor={inkColor}
       >
         $
       </Text>
@@ -116,11 +120,11 @@ function Coin() {
         position={[0, -0.11, 0]}
         rotation={[Math.PI / 2, 0, 0]}
         fontSize={1.2}
-        color="#1e1e1e"
+        color={inkColor}
         anchorX="center"
         anchorY="middle"
         outlineWidth={0.02}
-        outlineColor="#1e1e1e"
+        outlineColor={inkColor}
       >
         $
       </Text>
@@ -129,10 +133,15 @@ function Coin() {
 }
 
 export function SpinningDollar() {
+  const { resolvedTheme } = useTheme()
+  const isLight = resolvedTheme === "light"
+  const bodyColor = isLight ? "#e4e4e4" : "#1e1e1e"
+  const inkColor = isLight ? "#1e1e1e" : "#e4e4e4"
+
   return (
     <div className="w-full h-full min-h-[300px]">
       <Canvas camera={{ position: [0, 0, 6], fov: 45 }}>
-        <Coin />
+        <Coin bodyColor={bodyColor} inkColor={inkColor} />
       </Canvas>
     </div>
   )
@@ -140,6 +149,8 @@ export function SpinningDollar() {
 
 export function PixelCharacter() {
   const canvasRef = useRef<HTMLCanvasElement>(null)
+  const { resolvedTheme } = useTheme()
+  const pixelColor = resolvedTheme === "light" ? "#1e1e1e" : "#e4e4e4"
 
   useEffect(() => {
     const canvas = canvasRef.current
@@ -148,6 +159,7 @@ export function PixelCharacter() {
     if (!ctx) return
 
     let frameCount = 0
+    let animationFrameId = 0
     const pixelSize = 8
     const runFrames = [
       [
@@ -176,21 +188,23 @@ export function PixelCharacter() {
       ctx.clearRect(0, 0, canvas.width, canvas.height)
       const frameIndex = Math.floor(frameCount / 10) % runFrames.length
       const currentFrame = runFrames[frameIndex]
-      ctx.fillStyle = "#1e1e1e"
+      ctx.fillStyle = pixelColor
       currentFrame.forEach((row, y) => {
         row.forEach((pixel, x) => {
           if (pixel === 1) ctx.fillRect(x * pixelSize, y * pixelSize, pixelSize, pixelSize)
         })
       })
       frameCount++
-      requestAnimationFrame(draw)
+      animationFrameId = requestAnimationFrame(draw)
     }
     draw()
-  }, [])
+
+    return () => cancelAnimationFrame(animationFrameId)
+  }, [pixelColor])
 
   return (
     <div className="flex flex-col items-center justify-center w-full h-full min-h-[300px]">
-      <div className="relative w-full overflow-hidden border-b border-black/10 py-8">
+      <div className="relative w-full overflow-hidden border-b border-line/15 py-8">
         <div className="animate-pixel-move">
           <canvas ref={canvasRef} width={64} height={64} className="mx-auto" />
         </div>

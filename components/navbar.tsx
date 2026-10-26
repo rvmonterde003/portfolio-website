@@ -1,13 +1,28 @@
 "use client"
 
-import { useState } from "react"
+import { useState, useEffect } from "react"
 import Link from "next/link"
 import Image from "next/image"
-import { Menu, X } from "lucide-react"
+import { Menu, X, Sun, Moon } from "lucide-react"
 import { motion, AnimatePresence } from "framer-motion"
+import { useTheme } from "next-themes"
 
 export default function Navbar() {
   const [isOpen, setIsOpen] = useState(false)
+  const [mounted, setMounted] = useState(false)
+  const { resolvedTheme, setTheme } = useTheme()
+
+  useEffect(() => {
+    setMounted(true)
+  }, [])
+
+  const isDark = mounted ? resolvedTheme === "dark" : true
+  const toggleTheme = () => setTheme(isDark ? "light" : "dark")
+  const toggleLabel = mounted
+    ? isDark
+      ? "Switch to light mode"
+      : "Switch to dark mode"
+    : "Toggle theme"
 
   const navLinks = [
     { name: "About", href: "#about" },
@@ -17,10 +32,10 @@ export default function Navbar() {
   ]
 
   return (
-    <nav className="fixed top-0 w-full z-50 backdrop-blur-md bg-[#e4e4e4]/40">
+    <nav className="fixed top-0 w-full z-50 backdrop-blur-md bg-surface/40 text-ink border-b border-line/5">
       <div className="max-w-7xl mx-auto px-6 h-20 flex items-center justify-between">
         <Link href="/" className="flex items-center gap-2">
-          <Image src="/images/logo.png" alt="Monterde Logo" width={32} height={32} />
+          <Image src="/images/logo.png" alt="Monterde Logo" width={32} height={32} className="dark:invert" />
           <span className="font-atkinson text-sm uppercase tracking-widest font-bold hidden sm:inline">monterde</span>
         </Link>
 
@@ -31,11 +46,30 @@ export default function Navbar() {
               {link.name}
             </Link>
           ))}
+          <button
+            type="button"
+            onClick={toggleTheme}
+            aria-label={toggleLabel}
+            className="p-2 border border-line/15 hover:bg-ink hover:text-surface transition-colors rounded-sm flex items-center justify-center cursor-pointer"
+          >
+            {mounted ? isDark ? <Sun size={16} /> : <Moon size={16} /> : <span className="w-4 h-4 block" />}
+          </button>
         </div>
 
-        <button className="md:hidden p-2" onClick={() => setIsOpen(!isOpen)} aria-label="Toggle menu">
-          {isOpen ? <X size={24} /> : <Menu size={24} />}
-        </button>
+        {/* Mobile Controls */}
+        <div className="flex md:hidden items-center gap-2">
+          <button
+            type="button"
+            onClick={toggleTheme}
+            aria-label={toggleLabel}
+            className="p-2 border border-line/15 hover:bg-ink hover:text-surface transition-colors rounded-sm flex items-center justify-center cursor-pointer"
+          >
+            {mounted ? isDark ? <Sun size={18} /> : <Moon size={18} /> : <span className="w-[18px] h-[18px] block" />}
+          </button>
+          <button className="p-2" onClick={() => setIsOpen(!isOpen)} aria-label="Toggle menu">
+            {isOpen ? <X size={24} /> : <Menu size={24} />}
+          </button>
+        </div>
       </div>
 
       {/* Mobile Menu Overlay */}
@@ -46,7 +80,7 @@ export default function Navbar() {
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: -10 }}
             transition={{ duration: 0.2 }}
-            className="md:hidden absolute top-20 left-0 w-full backdrop-blur-2xl bg-[#e4e4e4]/90 border-b border-black/5 shadow-xl"
+            className="md:hidden absolute top-20 left-0 w-full backdrop-blur-2xl bg-surface/95 text-ink border-b border-line/10 shadow-xl"
           >
             <div className="flex flex-col p-8 gap-8 font-atkinson text-sm uppercase tracking-widest font-bold">
               {navLinks.map((link) => (
@@ -54,11 +88,20 @@ export default function Navbar() {
                   key={link.name}
                   href={link.href}
                   onClick={() => setIsOpen(false)}
-                  className="hover:opacity-50 transition-opacity border-b border-black/5 pb-2 last:border-0"
+                  className="hover:opacity-50 transition-opacity border-b border-line/10 pb-2"
                 >
                   {link.name}
                 </Link>
               ))}
+              <button
+                type="button"
+                onClick={toggleTheme}
+                aria-label={toggleLabel}
+                className="flex items-center justify-between hover:opacity-50 transition-opacity text-left uppercase tracking-widest cursor-pointer"
+              >
+                <span>{mounted ? (isDark ? "Light Mode" : "Dark Mode") : "Theme"}</span>
+                {mounted ? isDark ? <Sun size={18} /> : <Moon size={18} /> : <span className="w-[18px] h-[18px] block" />}
+              </button>
             </div>
           </motion.div>
         )}
