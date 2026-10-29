@@ -112,31 +112,32 @@ export default function PortfolioClient() {
 
             <div className="lg:col-span-8 grid grid-cols-1 md:grid-cols-2 gap-12">
               <motion.div variants={fadeInUp} className="space-y-6">
-                <h3 className="font-atkinson text-xs uppercase tracking-widest font-black opacity-40">The Stack</h3>
-                <blockquote className="text-2xl leading-relaxed italic bg-ink-contrast text-surface-contrast px-4 py-2 inline-block">
-                  &ldquo;The only stack that matters is the one that solves the problem.&rdquo;
-                </blockquote>
-              </motion.div>
-
-              <motion.div variants={fadeInUp} className="space-y-6">
-                <h3 className="font-atkinson text-xs uppercase tracking-widest font-black opacity-40">How I Work</h3>
+                <h3 className="font-atkinson text-xs uppercase tracking-widest font-black opacity-40">Now</h3>
+                <div>
+                  <h4 className="text-3xl font-bold tracking-tighter text-ink-contrast">Action Drone USA</h4>
+                  <p className="font-atkinson text-xs uppercase tracking-widest font-black opacity-60 mt-2">
+                    Founding Engineer · Lead Robotics &amp; AI Architect
+                  </p>
+                </div>
                 <p className="text-sm leading-relaxed opacity-70">
-                  Fixed scope, fixed timeline. Week 0 is access and setup, then a demo every week, then
-                  handover with docs and training. You own the code and the accounts from day one. Security is built
-                  in: personal data is scrubbed before it reaches an AI model, access is role-based, and every feature
-                  is reviewed before release.
+                  I own the AI drone program&apos;s architecture across mechanical, electronics and software, from
+                  airframe and flight hardware to the onboard AI that lets it sense, decide and act.
                 </p>
               </motion.div>
 
               <motion.div variants={fadeInUp} className="space-y-6">
                 <h3 className="font-atkinson text-xs uppercase tracking-widest font-black opacity-40">Now</h3>
+                <div>
+                  <h4 className="text-3xl font-bold tracking-tighter text-ink-contrast">Prime AI</h4>
+                  <p className="font-atkinson text-xs uppercase tracking-widest font-black opacity-60 mt-2">
+                    Pod Lead · Technical Consultant
+                  </p>
+                </div>
                 <p className="text-sm leading-relaxed opacity-70">
-                  Founding Engineer, Lead Robotics &amp; AI Architect at Klick Drone — I own the AI drone program&apos;s
-                  architecture across mechanical, electronics and software.
-                </p>
-                <p className="text-sm leading-relaxed opacity-70">
-                  Pod Lead &amp; Technical Lead at Prime AI — I lead a delivery pod building custom AI platforms for
-                  founder-led businesses on fixed 6-week scopes.
+                  I lead a delivery pod building custom AI platforms for founder-led businesses on fixed 6-week
+                  scopes. The job isn&apos;t shipping the project, it&apos;s moving the business: I scope each build
+                  around the outcome it has to drive, like more booked calls, faster sales ramp or hours handed back
+                  to the team, and measure it against that once it&apos;s live.
                 </p>
               </motion.div>
             </div>
