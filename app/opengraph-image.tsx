@@ -1,6 +1,6 @@
 import { ImageResponse } from "next/og"
 
-export const alt = 'Rommel "Mel" Monterde | AI Agents, Physical AI & Hardware Prototyping'
+export const alt = "Monterde Systems | AI Automation & Systems Engineering"
 export const size = { width: 1200, height: 630 }
 export const contentType = "image/png"
 
@@ -21,10 +21,10 @@ export default function Image() {
         }}
       >
         <div style={{ display: "flex", fontSize: 84, fontWeight: 800, letterSpacing: -2, textTransform: "uppercase" }}>
-          {'ROMMEL "MEL" MONTERDE'}
+          MONTERDE SYSTEMS
         </div>
         <div style={{ display: "flex", fontSize: 36, marginTop: 28, opacity: 0.8 }}>
-          AI Agents · Physical AI · Hardware Prototyping
+          AI Automation · Systems Engineering · Robotics
         </div>
         <div style={{ display: "flex", position: "absolute", left: 80, bottom: 56, fontSize: 24, opacity: 0.55 }}>
           monterdesystems.xyz

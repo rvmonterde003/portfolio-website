@@ -6,6 +6,7 @@ import Image from "next/image"
 import { Menu, X, Sun, Moon } from "lucide-react"
 import { motion, AnimatePresence } from "framer-motion"
 import { useTheme } from "next-themes"
+import { openBooking } from "@/lib/booking"
 
 export default function Navbar() {
   const [isOpen, setIsOpen] = useState(false)
@@ -25,9 +26,9 @@ export default function Navbar() {
     : "Toggle theme"
 
   const navLinks = [
-    { name: "About", href: "#about" },
     { name: "Services", href: "#services" },
     { name: "Work", href: "#case-studies" },
+    { name: "About", href: "#about" },
     { name: "Contact", href: "#contact" },
   ]
 
@@ -42,10 +43,21 @@ export default function Navbar() {
         {/* Desktop Nav */}
         <div className="hidden md:flex items-center gap-8 font-atkinson text-sm uppercase tracking-widest font-bold">
           {navLinks.map((link) => (
-            <Link key={link.name} href={link.href} className="hover:opacity-50 transition-opacity">
+            <Link
+              key={link.name}
+              href={link.href}
+              className="hover:opacity-50 transition-opacity rounded-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ink focus-visible:ring-offset-2 focus-visible:ring-offset-surface"
+            >
               {link.name}
             </Link>
           ))}
+          <button
+            type="button"
+            onClick={() => openBooking("nav")}
+            className="px-4 py-2 bg-ink text-surface rounded-sm hover:opacity-90 transition-opacity font-atkinson text-xs uppercase tracking-widest font-black focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ink focus-visible:ring-offset-2 focus-visible:ring-offset-surface cursor-pointer"
+          >
+            Book a Call
+          </button>
           <button
             type="button"
             onClick={toggleTheme}
@@ -66,7 +78,13 @@ export default function Navbar() {
           >
             {mounted ? isDark ? <Sun size={18} /> : <Moon size={18} /> : <span className="w-[18px] h-[18px] block" />}
           </button>
-          <button className="p-2" onClick={() => setIsOpen(!isOpen)} aria-label="Toggle menu">
+          <button
+            type="button"
+            className="p-2 rounded-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ink"
+            onClick={() => setIsOpen(!isOpen)}
+            aria-label="Toggle menu"
+            aria-expanded={isOpen}
+          >
             {isOpen ? <X size={24} /> : <Menu size={24} />}
           </button>
         </div>
@@ -88,11 +106,21 @@ export default function Navbar() {
                   key={link.name}
                   href={link.href}
                   onClick={() => setIsOpen(false)}
-                  className="hover:opacity-50 transition-opacity border-b border-line/10 pb-2"
+                  className="hover:opacity-50 transition-opacity border-b border-line/10 pb-2 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ink"
                 >
                   {link.name}
                 </Link>
               ))}
+              <button
+                type="button"
+                onClick={() => {
+                  setIsOpen(false)
+                  openBooking("nav_mobile")
+                }}
+                className="w-full px-4 py-3 bg-ink text-surface rounded-sm hover:opacity-90 transition-opacity font-atkinson text-xs uppercase tracking-widest font-black focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ink focus-visible:ring-offset-2 focus-visible:ring-offset-surface cursor-pointer"
+              >
+                Book a Discovery Call
+              </button>
               <button
                 type="button"
                 onClick={toggleTheme}

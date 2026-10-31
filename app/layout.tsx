@@ -25,21 +25,24 @@ const geistMono = Geist_Mono({
 export const metadata: Metadata = {
   metadataBase: new URL("https://monterdesystems.xyz"),
   title: {
-    default: `Rommel "Mel" Monterde | AI Agents & Robotics Engineer`,
-    template: `%s | Mel Monterde`,
+    default: "Monterde Systems | AI Automation & Systems Engineering",
+    template: "%s | Monterde Systems",
   },
-  description: `Custom AI agents, AI sales call analysis, physical AI and hardware prototyping, built end to end by Rommel "Mel" Monterde, robotics & AI engineer in Cebu, Philippines.`,
+  description:
+    "Founder-led AI automation, systems integration, technical consulting, and robotics engineering for businesses building practical, reliable solutions.",
   keywords: [
+    "AI automation consultant",
+    "AI workflow automation",
+    "AI systems integration",
     "custom AI agents for business",
-    "AI agent developer",
     "AI sales call analysis",
+    "technical consulting",
+    "AI solution architecture",
     "physical AI and robotics",
-    "robotics prototyping services",
     "hardware prototyping services",
     "embedded systems engineer",
-    "AI training for employees",
-    "AI automation consultant",
     "AI developer Philippines",
+    "Monterde Systems",
     "Rommel Vincent Monterde",
     "Mel Monterde",
   ],
@@ -51,14 +54,16 @@ export const metadata: Metadata = {
     url: "/",
     siteName: "Monterde Systems",
     locale: "en_US",
-    title: `Rommel "Mel" Monterde | AI Agents & Robotics Engineer`,
-    description: `Custom AI agents, AI sales call analysis, physical AI and hardware prototyping, built end to end by Rommel "Mel" Monterde, robotics & AI engineer in Cebu, Philippines.`,
+    title: "Monterde Systems | AI Automation & Systems Engineering",
+    description:
+      "Founder-led AI automation, systems integration, technical consulting, and robotics engineering for businesses building practical, reliable solutions.",
   },
   twitter: {
     card: "summary_large_image",
     creator: "@vinxx_mntrd",
-    title: `Rommel "Mel" Monterde | AI Agents & Robotics Engineer`,
-    description: `Custom AI agents, AI sales call analysis, physical AI and hardware prototyping, built end to end by Rommel "Mel" Monterde, robotics & AI engineer in Cebu, Philippines.`,
+    title: "Monterde Systems | AI Automation & Systems Engineering",
+    description:
+      "Founder-led AI automation, systems integration, technical consulting, and robotics engineering for businesses building practical, reliable solutions.",
   },
   robots: { index: true, follow: true },
   icons: {
