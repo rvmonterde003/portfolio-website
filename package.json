@@ -6,12 +6,16 @@
     "build": "next build",
     "dev": "next dev",
     "lint": "eslint .",
-    "start": "next start"
+    "start": "next start",
+    "check:secrets": "node scripts/check-client-secrets.mjs"
   },
   "pnpm": {
     "ignoredBuiltDependencies": ["sharp"]
   },
   "dependencies": {
+    "@upstash/ratelimit": "^2.0.8",
+    "@upstash/redis": "^1.35.3",
+    "server-only": "^0.0.1",
     "@emotion/is-prop-valid": "latest",
     "@hookform/resolvers": "^3.10.0",
     "@radix-ui/react-accordion": "1.2.2",
