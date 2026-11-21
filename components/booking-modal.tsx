@@ -305,7 +305,7 @@ export function BookingModal({ source, service, open, onOpenChange, onCloseAutoF
     <div className="space-y-2 pr-8">
       <p className={label}>Let&apos;s talk</p>
       <Title className="text-2xl font-bold tracking-tight text-ink">Book a discovery call</Title>
-      <Description className="text-sm text-ink-muted">30 minutes to talk through your project.{service ? ` Topic: ${service}.` : ""}</Description>
+      <Description className="text-sm text-ink-muted">30 minutes to talk through your project.{toService(service) ? ` Topic: ${SERVICE_LABELS[toService(service)!]}.` : ""}</Description>
     </div>
     <div aria-live="polite" aria-atomic="true" role="status" className="text-sm">
       {message && <p className="rounded-sm border border-line/30 p-3">{message}</p>}
