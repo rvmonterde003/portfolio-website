@@ -1,4 +1,5 @@
 import "server-only"
+import { SERVICE_LABELS, type Service } from "@/lib/booking-contract"
 import { getGoogleConfig, isMock, TIMEZONE } from "./booking-config"
 import { DAY_MS, manilaDate, manilaMidnight, type BusyInterval } from "./slots"
 
@@ -85,7 +86,7 @@ export async function queryBusy(timeMin: string, timeMax: string, signal?: Abort
   }
 }
 
-type EventInput = BusyInterval & { name: string; email: string; note: string; source: string; service?: string }
+type EventInput = BusyInterval & { name: string; email: string; note: string; source: string; org: string; service: Service }
 
 export async function insertEvent(input: EventInput, signal?: AbortSignal): Promise<void> {
   if (isMock()) {
@@ -100,9 +101,10 @@ export async function insertEvent(input: EventInput, signal?: AbortSignal): Prom
       method: "POST", headers: { Authorization: `Bearer ${token}`, "Content-Type": "application/json" },
       body: JSON.stringify({
         summary: "Discovery call with Mel Monterde",
-        description: "Booked via monterde website. Google Meet link is attached.",
+        // The topic comes from the enum lookup only; visitor free text never reaches the invite.
+        description: "Booked via monterde website. Google Meet link is attached.\nTopic: " + SERVICE_LABELS[input.service],
         extendedProperties: { private: {
-          name: input.name, note: input.note.slice(0, 1000), source: input.source, service: input.service || "",
+          name: input.name, note: input.note.slice(0, 1000), source: input.source, org: input.org.slice(0, 120), service: input.service,
         } },
         start: { dateTime: input.start, timeZone: TIMEZONE }, end: { dateTime: input.end, timeZone: TIMEZONE },
         attendees: [{ email: input.email }],

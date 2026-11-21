@@ -58,14 +58,29 @@ async function consumeLimit(limiter: Ratelimit, key: string): Promise<boolean> {
   return result.success
 }
 
+// Collapses aliasing tricks so the per-email cap holds: lowercase, strip +tags,
+// and for Gmail also remove local-part dots and fold googlemail.com into gmail.com.
+export function canonicalEmail(email: string): string {
+  const trimmed = email.trim().toLowerCase()
+  const at = trimmed.lastIndexOf("@")
+  if (at < 0) return trimmed
+  let local = trimmed.slice(0, at)
+  let domain = trimmed.slice(at + 1)
+  if (domain === "googlemail.com") domain = "gmail.com"
+  const plus = local.indexOf("+")
+  if (plus !== -1) local = local.slice(0, plus)
+  if (domain === "gmail.com") local = local.replaceAll(".", "")
+  return `${local}@${domain}`
+}
+
 export async function checkBookingLimits(email: string): Promise<boolean> {
   if (isMock()) return true
   return upstash(async () => {
     bookingLimits ??= {
       email: new Ratelimit({ redis: getRedis(), limiter: Ratelimit.slidingWindow(2, "7 d"), prefix: "booking:email", analytics: false, timeout: 3000 }),
-      global: new Ratelimit({ redis: getRedis(), limiter: Ratelimit.slidingWindow(10, "24 h"), prefix: "booking:global", analytics: false, timeout: 3000 }),
+      global: new Ratelimit({ redis: getRedis(), limiter: Ratelimit.slidingWindow(4, "24 h"), prefix: "booking:global", analytics: false, timeout: 3000 }),
     }
-    const key = createHash("sha256").update(email.trim().toLowerCase()).digest("hex")
+    const key = createHash("sha256").update(canonicalEmail(email)).digest("hex")
     if (!await consumeLimit(bookingLimits.email, key)) return false
     return consumeLimit(bookingLimits.global, "all")
   })

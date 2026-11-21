@@ -1,3 +1,4 @@
+import disposableDomains from "disposable-email-domains/index.json"
 import { bookRequestSchema, type BookResponse, type BookingError, type BookingErrorCode } from "@/lib/booking-contract"
 import { BUFFER_MINUTES, isBookingConfigured, isMock, SLOT_MINUTES } from "@/lib/server/booking-config"
 import { checkBookingLimits, checkOrigin, checkRateLimit, requestIp, UpstashError, verifyTurnstile, withBookingLock } from "@/lib/server/booking-guard"
@@ -7,6 +8,16 @@ import { isSlotValid, overlapsBusy } from "@/lib/server/slots"
 export const runtime = "nodejs"
 const headers = { "Cache-Control": "no-store" }
 const MAX_BODY_BYTES = 16 * 1024
+const disposableSet = new Set<string>(disposableDomains)
+
+// Matches the email's domain and every parent domain (sub.mailinator.com -> mailinator.com).
+function hasDisposableDomain(email: string): boolean {
+  const parts = email.slice(email.lastIndexOf("@") + 1).toLowerCase().split(".")
+  for (let index = 0; index < parts.length - 1; index++) {
+    if (disposableSet.has(parts.slice(index).join("."))) return true
+  }
+  return false
+}
 
 function failure(code: BookingErrorCode, status: number, error?: unknown): Response {
   const requestId = crypto.randomUUID()
@@ -50,6 +61,7 @@ export async function POST(req: Request): Promise<Response> {
     if (!parsed.success) return failure("invalid_request", 400)
     const input = parsed.data
     if (input.company !== "") return failure("forbidden", 403)
+    if (hasDisposableDomain(input.email)) return failure("forbidden", 403)
     if (!await verifyTurnstile(input.turnstileToken, requestIp(req))) return failure("forbidden", 403)
     if (!isSlotValid(input.start, new Date())) return failure("invalid_request", 400)
     if (!await checkBookingLimits(input.email)) return failure("rate_limited", 429)

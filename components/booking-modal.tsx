@@ -6,7 +6,7 @@ import { Dialog, DialogContent, DialogDescription, DialogTitle } from "@/compone
 import { Drawer, DrawerClose, DrawerContent, DrawerDescription, DrawerTitle } from "@/components/ui/drawer"
 import { useIsMobile } from "@/hooks/use-mobile"
 import { bookingFallbackUrl, type BookingIntent } from "@/lib/booking"
-import { bookRequestSchema, type AvailabilityResponse, type BookingError, type BookRequest, type BookResponse, type Slot } from "@/lib/booking-contract"
+import { bookRequestSchema, SERVICE_LABELS, SERVICES, toService, type AvailabilityResponse, type BookingError, type BookResponse, type Service, type Slot } from "@/lib/booking-contract"
 import { DAY_MS, manilaDate, manilaMidnight } from "@/lib/server/slots"
 
 const label = "font-atkinson text-xs font-bold uppercase tracking-widest"
@@ -137,10 +137,19 @@ function errorMessage(error: unknown) {
   if (error instanceof ApiError) {
     if (error.status === 429) return "Too many requests. Please try again later."
     if (error.status === 503) return "Booking is temporarily unavailable. You can use the booking link below."
-    if (error.status === 403) return "Verification failed. Complete verification again, then retry."
-    if (error.status === 400) return "Please check your details and try again."
+    if (error.status === 403) return "We couldn't verify this booking. Use a permanent email and complete verification again."
+    if (error.status === 400) return "Check the highlighted fields"
   }
   return "Could not connect. Please retry."
+}
+
+type FieldName = "name" | "email" | "org" | "service" | "note"
+const FIELD_COPY: Record<FieldName, string> = {
+  name: "Enter your name.",
+  email: "Enter a valid work email.",
+  org: "Enter your company or website.",
+  service: "Choose one option.",
+  note: "Add more detail: at least 40 characters and 5 words.",
 }
 
 type Props = BookingIntent & {
@@ -165,8 +174,12 @@ export function BookingModal({ source, service, open, onOpenChange, onCloseAutoF
   const [step, setStep] = useState<"time" | "form" | "done">("time")
   const [name, setName] = useState("")
   const [email, setEmail] = useState("")
+  const [org, setOrg] = useState("")
+  const [selectedService, setSelectedService] = useState<Service | "">(() => toService(service) ?? "")
   const [note, setNote] = useState("")
   const [company, setCompany] = useState("")
+  const [touched, setTouched] = useState<Partial<Record<FieldName, boolean>>>({})
+  const [showErrors, setShowErrors] = useState(false)
   const [token, setToken] = useState(initialToken)
   const [resetVersion, setResetVersion] = useState(0)
   const [submitting, setSubmitting] = useState(false)
@@ -234,13 +247,23 @@ export function BookingModal({ source, service, open, onOpenChange, onCloseAutoF
     setRefresh((value) => value + 1)
   }
 
+  const request = { start: selected?.start ?? "", name, email, org, note, source, service: selectedService, turnstileToken: token, company }
+  const validation = bookRequestSchema.safeParse(request)
+  const fieldErrors: Partial<Record<FieldName, string[]>> = validation.success ? {} : validation.error.flatten().fieldErrors
+  function fieldError(field: FieldName) {
+    return (touched[field] || showErrors) && fieldErrors[field] ? FIELD_COPY[field] : ""
+  }
+  function markTouched(field: FieldName) {
+    setTouched((value) => ({ ...value, [field]: true }))
+  }
+
   async function submit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault()
     if (!selected || !token || submission.current || completed.current) return
-    const request: BookRequest = { start: selected.start, name, email, note, source, ...(service ? { service } : {}), turnstileToken: token, company }
     const parsed = bookRequestSchema.safeParse(request)
     if (!parsed.success) {
-      setMessage("Please check your name, email, and note, then try again.")
+      setShowErrors(true)
+      setMessage("Check the highlighted fields")
       return
     }
     submission.current = true
@@ -255,7 +278,7 @@ export function BookingModal({ source, service, open, onOpenChange, onCloseAutoF
       setStep("done")
       if (!completed.current) {
         completed.current = true
-        track("booking_completed", service ? { source, service } : { source })
+        track("booking_completed", { source, service: parsed.data.service })
       }
     } catch (error: unknown) {
       if (sitekey) { setToken(""); setResetVersion((value) => value + 1) }
@@ -265,6 +288,7 @@ export function BookingModal({ source, service, open, onOpenChange, onCloseAutoF
         setStep("time")
         retryAvailability()
       } else {
+        if (error instanceof ApiError && error.status === 400) setShowErrors(true)
         setMessage(errorMessage(error))
         setFallback(error instanceof ApiError && (error.status === 503 || (error.status === 403 && !sitekey)))
       }
@@ -332,13 +356,50 @@ export function BookingModal({ source, service, open, onOpenChange, onCloseAutoF
       </div>
       <fieldset disabled={submitting} className="min-w-0 space-y-4">
         <legend className="sr-only">Contact details</legend>
-        <div className="space-y-2"><label htmlFor={`${id}-name`} className={label}>Name</label><input id={`${id}-name`} name="name" autoComplete="name" required maxLength={100} value={name} onChange={(event) => setName(event.target.value)} className={input} /></div>
-        <div className="space-y-2"><label htmlFor={`${id}-email`} className={label}>Email</label><input id={`${id}-email`} name="email" type="email" autoComplete="email" required maxLength={254} value={email} onChange={(event) => setEmail(event.target.value)} className={input} /></div>
-        <div className="space-y-2"><label htmlFor={`${id}-note`} className={label}>Note (optional)</label><textarea id={`${id}-note`} name="note" rows={3} maxLength={2000} value={note} onChange={(event) => setNote(event.target.value)} className={`${input} resize-y`} /></div>
+        <div className="space-y-2">
+          <label htmlFor={`${id}-name`} className={label}>Name</label>
+          <input id={`${id}-name`} name="name" autoComplete="name" required maxLength={100} placeholder="Jane Reyes" value={name}
+            onChange={(event) => setName(event.target.value)} onBlur={() => markTouched("name")}
+            aria-invalid={!!fieldError("name")} aria-describedby={fieldError("name") ? `${id}-name-error` : undefined} className={input} />
+          {fieldError("name") && <p id={`${id}-name-error`} className="text-sm text-red-600 dark:text-red-400">{fieldError("name")}</p>}
+        </div>
+        <div className="space-y-2">
+          <label htmlFor={`${id}-email`} className={label}>Work email</label>
+          <input id={`${id}-email`} name="email" type="email" autoComplete="email" required maxLength={254} placeholder="jane@company.com" value={email}
+            onChange={(event) => setEmail(event.target.value)} onBlur={() => markTouched("email")}
+            aria-invalid={!!fieldError("email")} aria-describedby={fieldError("email") ? `${id}-email-error` : undefined} className={input} />
+          {fieldError("email") && <p id={`${id}-email-error`} className="text-sm text-red-600 dark:text-red-400">{fieldError("email")}</p>}
+        </div>
+        <div className="space-y-2">
+          <label htmlFor={`${id}-org`} className={label}>Company or website</label>
+          <input id={`${id}-org`} name="org" autoComplete="organization" required maxLength={120} placeholder="Acme Robotics or acme.io" value={org}
+            onChange={(event) => setOrg(event.target.value)} onBlur={() => markTouched("org")}
+            aria-invalid={!!fieldError("org")} aria-describedby={fieldError("org") ? `${id}-org-error` : undefined} className={input} />
+          {fieldError("org") && <p id={`${id}-org-error`} className="text-sm text-red-600 dark:text-red-400">{fieldError("org")}</p>}
+        </div>
+        <div className="space-y-2">
+          <label htmlFor={`${id}-service`} className={label}>What do you need?</label>
+          <select id={`${id}-service`} name="service" required value={selectedService}
+            onChange={(event) => setSelectedService(event.target.value as Service | "")} onBlur={() => markTouched("service")}
+            aria-invalid={!!fieldError("service")} aria-describedby={fieldError("service") ? `${id}-service-error` : undefined} className={input}>
+            <option value="" disabled>Choose one</option>
+            {SERVICES.map((value) => <option key={value} value={value}>{SERVICE_LABELS[value]}</option>)}
+          </select>
+          {fieldError("service") && <p id={`${id}-service-error`} className="text-sm text-red-600 dark:text-red-400">{fieldError("service")}</p>}
+        </div>
+        <div className="space-y-2">
+          <label htmlFor={`${id}-note`} className={label}>What&apos;s it about?</label>
+          <textarea id={`${id}-note`} name="note" rows={4} required maxLength={2000}
+            placeholder="What you're building, what's broken, and what you want out of the call" value={note}
+            onChange={(event) => setNote(event.target.value)} onBlur={() => markTouched("note")}
+            aria-invalid={!!fieldError("note")} aria-describedby={`${id}-note-help${fieldError("note") ? ` ${id}-note-error` : ""}`} className={`${input} resize-y`} />
+          <p id={`${id}-note-help`} className="text-xs text-ink-muted">{note.trim().length}/40 characters minimum</p>
+          {fieldError("note") && <p id={`${id}-note-error`} className="text-sm text-red-600 dark:text-red-400">{fieldError("note")}</p>}
+        </div>
         <div aria-hidden="true" className="fixed -left-[10000px] top-0 h-px w-px overflow-hidden"><label htmlFor={`${id}-company`}>Reference code</label><input id={`${id}-company`} name="company" tabIndex={-1} autoComplete="off" maxLength={200} value={company} onChange={(event) => setCompany(event.target.value)} /></div>
       </fieldset>
       <Verification onToken={setToken} resetVersion={resetVersion} />
-      <button type="submit" disabled={submitting || !token} className={`${button} ${label} w-full bg-ink text-surface hover:bg-ink/90`}>{submitting ? "Booking…" : "Confirm booking"}</button>
+      <button type="submit" disabled={submitting || !token || !validation.success} className={`${button} ${label} w-full bg-ink text-surface hover:bg-ink/90`}>{submitting ? "Booking…" : "Confirm booking"}</button>
       {sitekey && !token && <p className="text-sm text-ink-muted" role="status">Complete verification to confirm your booking.</p>}
     </form>}
     {step === "done" && <div className="space-y-4 py-4">
