@@ -1,13 +1,32 @@
 import { track } from "@vercel/analytics"
 
-export const BOOKING_URL = "https://calendly.com/rommelvincent2001/30min"
+export type BookingIntent = { source: string; service?: string }
 
-// Opens the Calendly popup; falls back to a new tab if the widget script hasn't loaded.
-// `source` tags where the click came from (utm_content in Calendly, plus a Vercel event).
+const listeners = new Set<(intent: BookingIntent) => void>()
+let pending: BookingIntent | undefined
+
+export function subscribeToBooking(listener: (intent: BookingIntent) => void) {
+  listeners.add(listener)
+  if (pending) {
+    const intent = pending
+    pending = undefined
+    listener(intent)
+  }
+  return () => { listeners.delete(listener) }
+}
+
+export function bookingFallbackUrl(source: string) {
+  return `https://calendly.com/rommelvincent2001/30min?utm_source=website&utm_content=${encodeURIComponent(source)}`
+}
+
 export function openBooking(source: string, service?: string) {
   track("booking_click", service ? { source, service } : { source })
-  const url = `${BOOKING_URL}?utm_source=website&utm_content=${encodeURIComponent(source)}`
-  const calendly = (window as any).Calendly
-  if (calendly?.showPopupWidget) calendly.showPopupWidget(url)
-  else window.open(url, "_blank", "noopener,noreferrer")
+  if (typeof window === "undefined") return
+  if (process.env.NEXT_PUBLIC_BOOKING_ENABLED !== "1") {
+    window.open(bookingFallbackUrl(source), "_blank", "noopener,noreferrer")
+    return
+  }
+  const intent = { source, service }
+  if (!listeners.size) pending = intent
+  else listeners.forEach((listener) => listener(intent))
 }
