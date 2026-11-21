@@ -18,7 +18,10 @@ async function googleFetch(url: string, init: RequestInit, signal?: AbortSignal)
       ...init, cache: "no-store", redirect: "error",
       signal: signal ? AbortSignal.any([signal, AbortSignal.timeout(4000)]) : AbortSignal.timeout(4000),
     })
-    if (!response.ok) throw new GoogleError(response.status)
+    if (!response.ok) {
+      if (response.status === 401) cachedToken = undefined
+      throw new GoogleError(response.status)
+    }
     return response
   } catch (error) {
     throw error instanceof GoogleError ? error : new GoogleError(503)
@@ -96,8 +99,11 @@ export async function insertEvent(input: EventInput, signal?: AbortSignal): Prom
     await googleFetch(`https://www.googleapis.com/calendar/v3/calendars/${encodeURIComponent(calendarId)}/events?conferenceDataVersion=1&sendUpdates=all`, {
       method: "POST", headers: { Authorization: `Bearer ${token}`, "Content-Type": "application/json" },
       body: JSON.stringify({
-        summary: `Discovery call — ${input.name}`,
-        description: `Name: ${input.name}\nEmail: ${input.email}\nNote: ${input.note}\nSource: ${input.source}\nService: ${input.service || ""}`,
+        summary: "Discovery call with Mel Monterde",
+        description: "Booked via monterde website. Google Meet link is attached.",
+        extendedProperties: { private: {
+          name: input.name, note: input.note.slice(0, 1000), source: input.source, service: input.service || "",
+        } },
         start: { dateTime: input.start, timeZone: TIMEZONE }, end: { dateTime: input.end, timeZone: TIMEZONE },
         attendees: [{ email: input.email }],
         conferenceData: { createRequest: { requestId: crypto.randomUUID(), conferenceSolutionKey: { type: "hangoutsMeet" } } },

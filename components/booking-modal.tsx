@@ -7,14 +7,15 @@ import { Drawer, DrawerClose, DrawerContent, DrawerDescription, DrawerTitle } fr
 import { useIsMobile } from "@/hooks/use-mobile"
 import { bookingFallbackUrl, type BookingIntent } from "@/lib/booking"
 import { bookRequestSchema, type AvailabilityResponse, type BookingError, type BookRequest, type BookResponse, type Slot } from "@/lib/booking-contract"
+import { DAY_MS, manilaDate, manilaMidnight } from "@/lib/server/slots"
 
 const label = "font-atkinson text-xs font-bold uppercase tracking-widest"
 const focus = "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ink focus-visible:ring-offset-2 focus-visible:ring-offset-surface"
 const button = `min-h-11 rounded-sm border border-line/30 px-3 py-2 text-sm hover:bg-ink/10 disabled:cursor-not-allowed disabled:opacity-50 ${focus}`
 const input = `w-full min-w-0 rounded-sm border border-line/30 bg-surface px-3 py-2 text-base text-ink ${focus}`
-const sitekey = process.env.NEXT_PUBLIC_TURNSTILE_SITE_KEY
+const sitekey = process.env.NEXT_PUBLIC_TURNSTILE_SITE_KEY?.trim()
 // The server rejects this development token outside its mock mode.
-const initialToken = sitekey ? "" : "mock"
+const initialToken = !sitekey && process.env.NODE_ENV !== "production" ? "mock" : ""
 
 type Turnstile = {
   ready: (callback: () => void) => void
@@ -120,17 +121,6 @@ function addDays(date: Date, count: number) {
   return result
 }
 
-function nextWeekdays() {
-  const result: Date[] = []
-  const cursor = new Date()
-  cursor.setHours(0, 0, 0, 0)
-  while (result.length < 14) {
-    if (cursor.getDay() !== 0 && cursor.getDay() !== 6) result.push(new Date(cursor))
-    cursor.setDate(cursor.getDate() + 1)
-  }
-  return result
-}
-
 class ApiError extends Error {
   constructor(readonly status: number, readonly detail?: BookingError) { super("Booking request failed") }
 }
@@ -162,9 +152,10 @@ type Props = BookingIntent & {
 export function BookingModal({ source, service, open, onOpenChange, onCloseAutoFocus }: Props) {
   const mobile = useIsMobile()
   const id = useId()
-  const [days] = useState(nextWeekdays)
+  const [openedAt] = useState(() => new Date())
   const [timezone] = useState(() => Intl.DateTimeFormat().resolvedOptions().timeZone)
-  const [day, setDay] = useState(() => dateKey(days[0]))
+  const [day, setDay] = useState("")
+  const [week, setWeek] = useState(0)
   const [slots, setSlots] = useState<Slot[]>([])
   const [ownerTimezone, setOwnerTimezone] = useState("")
   const [loading, setLoading] = useState(true)
@@ -201,15 +192,9 @@ export function BookingModal({ source, service, open, onOpenChange, onCloseAutoF
     const controller = new AbortController()
     setLoading(true)
     setFetchError(null)
-    // Pad UTC bounds by a day to cover owner/visitor timezone differences.
-    // Each request stays within the contract's seven-day limit.
-    const first = new Date(days[0])
-    first.setUTCDate(first.getUTCDate() - 1)
-    const last = addDays(days[days.length - 1], 2)
-    const windows: string[] = []
-    for (const cursor = new Date(first); cursor <= last; cursor.setUTCDate(cursor.getUTCDate() + 7)) {
-      windows.push(cursor.toISOString().slice(0, 10))
-    }
+    // Fetch three seven-day windows using Manila calendar dates, regardless of visitor timezone.
+    const first = manilaMidnight(manilaDate(openedAt)).getTime()
+    const windows = [0, 7, 14].map((offset) => manilaDate(new Date(first + offset * DAY_MS)))
     Promise.all(windows.map(async (from) => {
       const response = await fetch(`/api/availability?from=${from}&days=7`, { signal: controller.signal, cache: "no-store" })
       return responseJson<AvailabilityResponse>(response)
@@ -224,18 +209,24 @@ export function BookingModal({ source, service, open, onOpenChange, onCloseAutoF
       if (!controller.signal.aborted) setLoading(false)
     })
     return () => controller.abort()
-  }, [open, days, refresh])
+  }, [open, openedAt, refresh])
 
   const timeFormat = new Intl.DateTimeFormat(undefined, { hour: "numeric", minute: "2-digit", timeZone: timezone })
   const fullDate = new Intl.DateTimeFormat(undefined, { dateStyle: "full", timeZone: timezone })
-  const daySlots = slots.filter((slot) => dateKey(new Date(slot.start)) === day)
-  const selectedDate = days.find((date) => dateKey(date) === day) ?? days[0]
-  const week = Math.floor((Date.UTC(selectedDate.getFullYear(), selectedDate.getMonth(), selectedDate.getDate()) - Date.UTC(days[0].getFullYear(), days[0].getMonth(), days[0].getDate())) / (7 * 86400000))
-  const weekStart = addDays(days[0], week * 7)
+  // A Manila workday may be a visitor weekend. Keep every local date with slots.
+  const days = [...new Map(slots.map((slot) => {
+    const date = new Date(slot.start)
+    date.setHours(0, 0, 0, 0)
+    return [dateKey(date), date] as const
+  })).values()]
+  const firstDay = new Date(openedAt)
+  firstDay.setHours(0, 0, 0, 0)
+  const weekStart = addDays(firstDay, week * 7)
   const weekEnd = addDays(weekStart, 7)
   const weekDays = days.filter((date) => date >= weekStart && date < weekEnd)
-  const weekHasSlots = slots.some((slot) => weekDays.some((date) => dateKey(date) === dateKey(new Date(slot.start))))
-  const nextWeekDay = days.find((date) => date >= weekEnd)
+  const activeDay = weekDays.some((date) => dateKey(date) === day) ? day : weekDays[0] ? dateKey(weekDays[0]) : ""
+  const daySlots = slots.filter((slot) => dateKey(new Date(slot.start)) === activeDay)
+  const weekHasSlots = weekDays.length > 0
 
   function retryAvailability() {
     setLoading(true)
@@ -275,7 +266,7 @@ export function BookingModal({ source, service, open, onOpenChange, onCloseAutoF
         retryAvailability()
       } else {
         setMessage(errorMessage(error))
-        setFallback(error instanceof ApiError && error.status === 503)
+        setFallback(error instanceof ApiError && (error.status === 503 || (error.status === 403 && !sitekey)))
       }
     } finally {
       submission.current = false
@@ -302,7 +293,11 @@ export function BookingModal({ source, service, open, onOpenChange, onCloseAutoF
       <fieldset>
         <legend className={`${label} mb-3`}>1. Pick a day</legend>
         <div className="grid grid-cols-3 gap-2 sm:grid-cols-5">
-          {days.map((date) => <button key={dateKey(date)} type="button" aria-pressed={day === dateKey(date)} aria-label={fullDate.format(date)} onClick={() => { setDay(dateKey(date)); setSelected(null) }} className={`${button} ${day === dateKey(date) ? "bg-ink text-surface hover:bg-ink/90" : ""}`}>
+          {days.map((date) => <button key={dateKey(date)} type="button" aria-pressed={activeDay === dateKey(date)} aria-label={fullDate.format(date)} onClick={() => {
+            setDay(dateKey(date))
+            setWeek(Math.floor((Date.UTC(date.getFullYear(), date.getMonth(), date.getDate()) - Date.UTC(firstDay.getFullYear(), firstDay.getMonth(), firstDay.getDate())) / (7 * DAY_MS)))
+            setSelected(null)
+          }} className={`${button} ${activeDay === dateKey(date) ? "bg-ink text-surface hover:bg-ink/90" : ""}`}>
             <span className="block text-xs">{date.toLocaleDateString(undefined, { weekday: "short" })}</span>
             <span className="block font-semibold">{date.toLocaleDateString(undefined, { month: "short", day: "numeric" })}</span>
           </button>)}
@@ -317,10 +312,10 @@ export function BookingModal({ source, service, open, onOpenChange, onCloseAutoF
         </div> : fetchError ? <div role="status" className="space-y-3 text-sm">
           <p>{errorMessage(fetchError)}</p>
           <button type="button" className={button} onClick={retryAvailability}>Retry availability</button>
-          {fetchError instanceof ApiError && fetchError.status === 503 && <div>{fallbackLink}</div>}
+          {fetchError instanceof ApiError && (fetchError.status === 503 || (fetchError.status === 403 && !sitekey)) && <div>{fallbackLink}</div>}
         </div> : !weekHasSlots ? <div role="status" className="space-y-3">
           <p>No open times this week</p>
-          {nextWeekDay ? <button type="button" className={button} onClick={() => setDay(dateKey(nextWeekDay))}>Next week</button> : <p className="text-sm text-ink-muted">No later times in the next 14 weekdays. Please check back soon.</p>}
+          {week < 2 ? <button type="button" className={button} onClick={() => { setWeek((value) => value + 1); setDay(""); setSelected(null) }}>Next week</button> : <p className="text-sm text-ink-muted">No later times in the next three weeks. Please check back soon.</p>}
         </div> : !daySlots.length ? <p role="status" className="text-sm text-ink-muted">No open times on this day. Choose another day.</p> : <div className="grid grid-cols-2 gap-2">
           {daySlots.map((slot) => <button type="button" key={slot.start} className={button} onClick={() => { setSelected(slot); setStep("form") }}>
             {timeFormat.format(new Date(slot.start))} – {timeFormat.format(new Date(slot.end))}
@@ -340,7 +335,7 @@ export function BookingModal({ source, service, open, onOpenChange, onCloseAutoF
         <div className="space-y-2"><label htmlFor={`${id}-name`} className={label}>Name</label><input id={`${id}-name`} name="name" autoComplete="name" required maxLength={100} value={name} onChange={(event) => setName(event.target.value)} className={input} /></div>
         <div className="space-y-2"><label htmlFor={`${id}-email`} className={label}>Email</label><input id={`${id}-email`} name="email" type="email" autoComplete="email" required maxLength={254} value={email} onChange={(event) => setEmail(event.target.value)} className={input} /></div>
         <div className="space-y-2"><label htmlFor={`${id}-note`} className={label}>Note (optional)</label><textarea id={`${id}-note`} name="note" rows={3} maxLength={2000} value={note} onChange={(event) => setNote(event.target.value)} className={`${input} resize-y`} /></div>
-        <div aria-hidden="true" className="fixed -left-[10000px] top-0 h-px w-px overflow-hidden"><label htmlFor={`${id}-company`}>Company</label><input id={`${id}-company`} name="company" tabIndex={-1} autoComplete="off" maxLength={200} value={company} onChange={(event) => setCompany(event.target.value)} /></div>
+        <div aria-hidden="true" className="fixed -left-[10000px] top-0 h-px w-px overflow-hidden"><label htmlFor={`${id}-company`}>Reference code</label><input id={`${id}-company`} name="company" tabIndex={-1} autoComplete="off" maxLength={200} value={company} onChange={(event) => setCompany(event.target.value)} /></div>
       </fieldset>
       <Verification onToken={setToken} resetVersion={resetVersion} />
       <button type="submit" disabled={submitting || !token} className={`${button} ${label} w-full bg-ink text-surface hover:bg-ink/90`}>{submitting ? "Booking…" : "Confirm booking"}</button>

@@ -22,7 +22,9 @@ export function bookingFallbackUrl(source: string) {
 export function openBooking(source: string, service?: string) {
   track("booking_click", service ? { source, service } : { source })
   if (typeof window === "undefined") return
-  if (process.env.NEXT_PUBLIC_BOOKING_ENABLED !== "1") {
+  const nativeEnabled = process.env.NEXT_PUBLIC_BOOKING_ENABLED === "1" &&
+    (Boolean(process.env.NEXT_PUBLIC_TURNSTILE_SITE_KEY?.trim()) || process.env.NODE_ENV !== "production")
+  if (!nativeEnabled) {
     window.open(bookingFallbackUrl(source), "_blank", "noopener,noreferrer")
     return
   }

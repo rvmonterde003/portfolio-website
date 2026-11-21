@@ -6,7 +6,19 @@ import { getAllowedOrigins, getRedisConfig, getTurnstileSecret, isMock } from ".
 
 let redis: Redis | undefined
 let limiters: Record<"availability" | "book", Ratelimit> | undefined
+let bookingLimits: Record<"email" | "global", Ratelimit> | undefined
 let mockLocked = false
+
+export class UpstashError extends Error {
+  constructor() {
+    super("Booking guard unavailable")
+    this.name = "UpstashError"
+  }
+}
+
+async function upstash<T>(fn: () => Promise<T>): Promise<T> {
+  try { return await fn() } catch { throw new UpstashError() }
+}
 
 function getRedis(): Redis {
   redis ??= new Redis({
@@ -28,16 +40,35 @@ export function requestIp(req: Request): string {
 
 export async function checkRateLimit(req: Request, kind: "availability" | "book"): Promise<boolean> {
   if (isMock()) return true
-  limiters ??= {
-    availability: new Ratelimit({ redis: getRedis(), limiter: Ratelimit.slidingWindow(30, "1 m"), prefix: "booking:availability", analytics: false, timeout: 3000 }),
-    book: new Ratelimit({ redis: getRedis(), limiter: Ratelimit.slidingWindow(5, "10 m"), prefix: "booking:book", analytics: false, timeout: 3000 }),
-  }
-  const key = createHash("sha256").update(requestIp(req)).digest("hex")
-  const result = await limiters[kind].limit(key)
+  return upstash(async () => {
+    limiters ??= {
+      availability: new Ratelimit({ redis: getRedis(), limiter: Ratelimit.slidingWindow(30, "1 m"), prefix: "booking:availability", analytics: false, timeout: 3000 }),
+      book: new Ratelimit({ redis: getRedis(), limiter: Ratelimit.slidingWindow(5, "10 m"), prefix: "booking:book", analytics: false, timeout: 3000 }),
+    }
+    const key = createHash("sha256").update(requestIp(req)).digest("hex")
+    return consumeLimit(limiters[kind], key)
+  })
+}
+
+async function consumeLimit(limiter: Ratelimit, key: string): Promise<boolean> {
+  const result = await limiter.limit(key)
   // The SDK permits requests on its own timeout; explicitly fail closed instead.
-  if (result.reason === "timeout") throw new Error("Booking guard unavailable")
+  if (result.reason === "timeout") throw new UpstashError()
   await result.pending
   return result.success
+}
+
+export async function checkBookingLimits(email: string): Promise<boolean> {
+  if (isMock()) return true
+  return upstash(async () => {
+    bookingLimits ??= {
+      email: new Ratelimit({ redis: getRedis(), limiter: Ratelimit.slidingWindow(2, "7 d"), prefix: "booking:email", analytics: false, timeout: 3000 }),
+      global: new Ratelimit({ redis: getRedis(), limiter: Ratelimit.slidingWindow(10, "24 h"), prefix: "booking:global", analytics: false, timeout: 3000 }),
+    }
+    const key = createHash("sha256").update(email.trim().toLowerCase()).digest("hex")
+    if (!await consumeLimit(bookingLimits.email, key)) return false
+    return consumeLimit(bookingLimits.global, "all")
+  })
 }
 
 export async function verifyTurnstile(token: string, ip: string): Promise<boolean> {
@@ -63,17 +94,19 @@ export async function withBookingLock<T>(fn: (signal: AbortSignal) => Promise<T>
     mockLocked = true
     try { return await fn(signal) } finally { mockLocked = false }
   }
-  const client = getRedis()
+  const client = await upstash(async () => getRedis())
   const value = crypto.randomUUID()
-  if (await client.set("booking:lock", value, { nx: true, px: 20_000 }) !== "OK") return "busy"
+  if (await upstash(() => client.set("booking:lock", value, { nx: true, px: 20_000 })) !== "OK") return "busy"
   try {
     signal.throwIfAborted()
     return await fn(signal)
   } finally {
     // Atomic ownership check: an expired lease must never delete its successor.
-    await client.eval(
-      "if redis.call('get', KEYS[1]) == ARGV[1] then return redis.call('del', KEYS[1]) else return 0 end",
-      ["booking:lock"], [value],
-    )
+    try {
+      await client.eval(
+        "if redis.call('get', KEYS[1]) == ARGV[1] then return redis.call('del', KEYS[1]) else return 0 end",
+        ["booking:lock"], [value],
+      )
+    } catch { /* The lease expires after 20 seconds if release fails. */ }
   }
 }

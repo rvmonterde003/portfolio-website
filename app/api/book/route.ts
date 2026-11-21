@@ -1,16 +1,17 @@
 import { bookRequestSchema, type BookResponse, type BookingError, type BookingErrorCode } from "@/lib/booking-contract"
 import { BUFFER_MINUTES, isBookingConfigured, isMock, SLOT_MINUTES } from "@/lib/server/booking-config"
-import { checkOrigin, checkRateLimit, requestIp, verifyTurnstile, withBookingLock } from "@/lib/server/booking-guard"
-import { insertEvent, queryBusy } from "@/lib/server/google-calendar"
+import { checkBookingLimits, checkOrigin, checkRateLimit, requestIp, UpstashError, verifyTurnstile, withBookingLock } from "@/lib/server/booking-guard"
+import { GoogleError, insertEvent, queryBusy } from "@/lib/server/google-calendar"
 import { isSlotValid, overlapsBusy } from "@/lib/server/slots"
 
 export const runtime = "nodejs"
 const headers = { "Cache-Control": "no-store" }
 const MAX_BODY_BYTES = 16 * 1024
 
-function failure(code: BookingErrorCode, status: number): Response {
+function failure(code: BookingErrorCode, status: number, error?: unknown): Response {
   const requestId = crypto.randomUUID()
-  console.error(`[book] ${requestId} ${code} ${status}`)
+  const kind = error instanceof GoogleError ? `google:${error.status}` : error instanceof UpstashError ? "upstash" : error instanceof Error ? error.name : "unknown"
+  console.error(`[book] ${requestId} ${code} ${status} ${kind}`)
   const body: BookingError = { error: code, requestId }
   return Response.json(body, { status, headers })
 }
@@ -50,7 +51,8 @@ export async function POST(req: Request): Promise<Response> {
     const input = parsed.data
     if (input.company !== "") return failure("forbidden", 403)
     if (!await verifyTurnstile(input.turnstileToken, requestIp(req))) return failure("forbidden", 403)
-    if (!isSlotValid(input.start, new Date())) return failure("slot_taken", 409)
+    if (!isSlotValid(input.start, new Date())) return failure("invalid_request", 400)
+    if (!await checkBookingLimits(input.email)) return failure("rate_limited", 429)
     const start = new Date(input.start).toISOString()
     const end = new Date(Date.parse(start) + SLOT_MINUTES * 60_000).toISOString()
     const result = await withBookingLock(async (signal) => {
@@ -66,5 +68,5 @@ export async function POST(req: Request): Promise<Response> {
     if (result !== "confirmed") return failure("slot_taken", 409)
     const response: BookResponse = { status: "confirmed", start, end }
     return Response.json(response, { headers })
-  } catch { return failure("unavailable", 503) }
+  } catch (error) { return failure("unavailable", 503, error) }
 }

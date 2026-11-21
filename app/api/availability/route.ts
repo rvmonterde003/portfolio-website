@@ -1,15 +1,18 @@
 import { availabilityQuerySchema, type AvailabilityResponse, type BookingError, type BookingErrorCode } from "@/lib/booking-contract"
 import { BUFFER_MINUTES, isBookingConfigured, isMock, MAX_DAYS_AHEAD, SLOT_MINUTES, TIMEZONE } from "@/lib/server/booking-config"
-import { checkRateLimit } from "@/lib/server/booking-guard"
-import { queryBusy } from "@/lib/server/google-calendar"
+import { checkRateLimit, UpstashError } from "@/lib/server/booking-guard"
+import { GoogleError, queryBusy } from "@/lib/server/google-calendar"
 import { buildSlots, DAY_MS, manilaDate, manilaMidnight } from "@/lib/server/slots"
 
 export const runtime = "nodejs"
 export const dynamic = "force-dynamic"
 const headers = { "Cache-Control": "no-store" }
 
-function failure(error: BookingErrorCode, status: number): Response {
-  const body: BookingError = { error, requestId: crypto.randomUUID() }
+function failure(code: BookingErrorCode, status: number, error?: unknown): Response {
+  const requestId = crypto.randomUUID()
+  const kind = error instanceof GoogleError ? `google:${error.status}` : error instanceof UpstashError ? "upstash" : error instanceof Error ? error.name : "unknown"
+  console.error(`[availability] ${requestId} ${code} ${status} ${kind}`)
+  const body: BookingError = { error: code, requestId }
   return Response.json(body, { status, headers })
 }
 
@@ -33,5 +36,5 @@ export async function GET(req: Request): Promise<Response> {
     }
     const body: AvailabilityResponse = { timezone: TIMEZONE, slots }
     return Response.json(body, { headers })
-  } catch { return failure("unavailable", 503) }
+  } catch (error) { return failure("unavailable", 503, error) }
 }
