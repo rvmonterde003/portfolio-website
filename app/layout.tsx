@@ -3,8 +3,8 @@ import type { Metadata } from "next"
 import { Atkinson_Hyperlegible, Outfit, Geist_Mono } from "next/font/google"
 import { Analytics } from "@vercel/analytics/next"
 import "./globals.css"
-import Script from "next/script"
 import { ThemeProvider } from "@/components/theme-provider"
+import { BookingProvider } from "@/components/booking-provider"
 
 const atkinson = Atkinson_Hyperlegible({
   subsets: ["latin"],
@@ -81,29 +81,15 @@ export default function RootLayout({
     <html lang="en" className="scroll-smooth" suppressHydrationWarning>
       <head>
         <script src="https://elfsightcdn.com/platform.js" async></script>
-        <link href="https://assets.calendly.com/assets/external/widget.css" rel="stylesheet" />
-        <script src="https://assets.calendly.com/assets/external/widget.js" type="text/javascript" async></script>
       </head>
       <body
         className={`${atkinson.variable} ${outfit.variable} ${geistMono.variable} font-sans antialiased bg-surface text-ink`}
       >
         <ThemeProvider attribute="class" defaultTheme="dark" enableSystem={false} disableTransitionOnChange>
           {children}
+          <BookingProvider />
         </ThemeProvider>
         <Analytics />
-        <Script id="calendly-init" strategy="afterInteractive">
-          {`
-            window.onload = function() {
-              Calendly.initBadgeWidget({
-                url: 'https://calendly.com/rommelvincent2001/30min',
-                text: 'Schedule time with me',
-                color: '#000000',
-                textColor: '#ffffff',
-                branding: true
-              });
-            }
-          `}
-        </Script>
       </body>
     </html>
   )
