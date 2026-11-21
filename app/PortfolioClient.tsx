@@ -15,7 +15,7 @@ import {
   ArrowRight,
 } from "lucide-react"
 import RotatingCube from "@/components/rotating-cube"
-import { DotSphereSection, DialingPhone, CostMeter } from "@/components/case-studies"
+import { CostMeter } from "@/components/case-studies"
 import Navbar from "@/components/navbar"
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion"
 import { MotionConfig, motion } from "framer-motion"
@@ -110,36 +110,6 @@ const services = [
 // TODO(owner): confirm each metric's measurement basis (baseline, period, setting) and that the
 // project is cleared for publication. Captions below describe the evidence honestly until then.
 const caseStudies = [
-  {
-    context: "QuixyFit Corp. / NoFace",
-    title: "Hybrid Leadership Framework",
-    challenge:
-      "Ship high-quality MVPs quickly across very different domains, from real-time multiplayer games to AI automation, with small teams.",
-    role: "Led the engineering teams: scoping, technical direction and delivery.",
-    solution:
-      "A lean delivery framework pairing small human teams with AI-assisted development and tight weekly scope control.",
-    metrics: [
-      { value: "10+", label: "MVPs in 10 months" },
-      { value: "62–70%", label: "Faster delivery (est.)" },
-    ],
-    evidence: "Delivery speed figures are self-reported estimates, not client-audited results.",
-    visual: <DotSphereSection />,
-  },
-  {
-    context: "Outbound Lead Gen",
-    title: "Cost-Efficient Call Engine",
-    challenge:
-      "High-volume outbound calling where generative AI on every call would make the unit economics unworkable.",
-    role: "Designed the call-decision architecture.", // TODO(owner): confirm exact role and permission to publish
-    solution:
-      "Keyword detection and a finite-state machine (a fixed set of call states with rules for moving between them) instead of a generative model on every turn.",
-    metrics: [
-      { value: "~$0.02", label: "Cost per call" },
-      { value: "<150ms", label: "Decision latency" },
-    ],
-    evidence: "Internal measurements of the engine, not a client-reported business outcome.",
-    visual: <DialingPhone />,
-  },
   {
     context: "Eeve + Memograph / AI Dev Tooling",
     title: "AI Memory Management",
